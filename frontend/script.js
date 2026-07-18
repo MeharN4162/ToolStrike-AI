@@ -115,7 +115,7 @@ async function runTool(endpoint, input, options = {}) {
   output.value = "";
 
   try {
-    const response = await fetch(`https://toolstrike-backend.onrender.com/${endpoint}`, {
+    const response = await fetch(`https://toolstrike-ai-backend.onrender.com/${endpoint}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ input, ...options }),
