@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ToolStrike AI</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body data-theme="dark">
+  <div class="starfield"></div>
+<div class="fog-layer"></div>
+<div class="aurora-ribbon"></div>
+<div class="aurora-ribbon ribbon-bottom"></div>
+<div class="vortex"></div>
+<div class="grid-scan"></div>
+
+
+
+<div class="spark spark-1"></div>
+<div class="spark spark-2"></div>
+<div class="spark spark-3"></div>
+<div class="spark spark-4"></div>
+
+<!-- CARTOON SPACE SCENE (BEHIND UI) -->
+<div class="space-scene">
+  <!-- RANDOM STARS CONTAINER -->
+  <div id="spaceStars"></div>
+
+  <!-- COMET -->
+  <div class="space-comet"></div>
+</div>
+
+  <div class="app-shell">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo-mark">TS</div>
+        <div class="logo-text">
+          <span class="logo-title">ToolStrike AI</span>
+          <span class="logo-subtitle">Multi‑Tool Workspace</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-label">Tools</div>
+
+        <div class="nav-item active" data-target="summarizer">
+          <span class="nav-dot"></span>
+          <span>Summarizer</span>
+        </div>
+
+        <div class="nav-item" data-target="paraphraser">
+          <span class="nav-dot"></span>
+          <span>Paraphraser</span>
+        </div>
+
+        <div class="nav-item" data-target="grammar">
+          <span class="nav-dot"></span>
+          <span>Grammar Fixer</span>
+        </div>
+
+        <div class="nav-item" data-target="email">
+          <span class="nav-dot"></span>
+          <span>Email Writer</span>
+        </div>
+
+        <div class="nav-item" data-target="study">
+          <span class="nav-dot"></span>
+          <span>Study Helper</span>
+        </div>
+
+        <div class="nav-item" data-target="length">
+          <span class="nav-dot"></span>
+          <span>Length Control</span>
+        </div>
+
+        <div class="nav-item" data-target="tone">
+          <span class="nav-dot"></span>
+          <span>Tone Changer</span>
+        </div>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div id="themeToggle" class="theme-toggle">
+          <span class="theme-icon">🌙</span>
+          <span class="theme-label">Dark</span>
+        </div>
+        <div class="sidebar-note">
+          Built by Mehar · ToolStrike v2.0
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN AREA -->
+    <main class="main">
+      <!-- HEADER -->
+      <header class="main-header">
+        <div class="header-left">
+          <h1 id="tool-title">AI Summarizer</h1>
+          <p id="tool-desc">Turn long text into a clean, short summary.</p>
+        </div>
+        <div class="header-right">
+          <div class="dna-strand"></div>
+          <div class="badge">Groq‑Powered</div>
+          <div class="badge badge-secondary">Local Dev</div>
+        </div>
+      </header>
+
+      <!-- TOOL PANEL AREA -->
+      <section class="tool-panel">
+
+        <!-- SUMMARIZER -->
+        <div class="tool-card active" id="summarizer">
+          <div class="panel-grid">
+            <div class="panel-section">
+              <label>Paste your text</label>
+              <textarea id="summarizer-input" class="prompt-box" placeholder="Paste long text here..."></textarea>
+            </div>
+
+            <div class="panel-section">
+              <label>Summary</label>
+              <div class="output-wrapper">
+                <textarea id="summarizer-output" class="answer-box" readonly></textarea>
+                <div class="loader" id="summarizer-loader">
+                  <div class="loader-dot"></div>
+                  <div class="loader-dot"></div>
+                  <div class="loader-dot"></div>
+                </div>
+              </div>
+              <div class="output-actions">
+                <button class="copy-btn" data-target="summarizer-output">Copy</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-actions">
+            <select id="summarizer-length">
+              <option value="short">Short</option>
+              <option value="medium" selected>Medium</option>
+              <option value="long">Long</option>
+            </select>
+            <button class="primary-btn" id="summarizer-run">Summarize</button>
+          </div>
+        </div>
+
+        <!-- PARAPHRASER -->
+        <div class="tool-card" id="paraphraser">
+          <div class="panel-grid">
+            <div class="panel-section">
+              <label>Paste your text</label>
+              <textarea id="paraphraser-input" class="prompt-box" placeholder="Paste text to paraphrase..."></textarea>
+            </div>
+
+            <div class="panel-section">
+              <label>Paraphrased Text</label>
+              <div class="output-wrapper">
+                <textarea id="paraphraser-output" class="answer-box" readonly></textarea>
+                <div class="loader" id="paraphraser-loader">
+                  <div class="loader-dot"></div>
+                  <div class="loader-dot"></div>
+                  <div class="loader-dot"></div>
+                </div>
+              </div>
+              <div class="output-actions">
+                <button class="copy-btn" data-target="paraphraser-output">Copy</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-actions">
+            <select id="paraphraser-tone">
+              <option value="neutral">Neutral</option>
+              <option value="formal">Formal</option>
+              <option value="simple">Simple</option>
+            </select>
+            <button class="primary-btn" id="paraphraser-run">Paraphrase</button>
+          </div>
+        </div>
+
+        <!-- GRAMMAR FIXER -->
+        <div class="tool-card" id="grammar">
+          <div class="panel-grid">
+            <div class="panel-section">
+              <label>Paste your text</label>
+              <textarea id="grammar-input" class="prompt-box" placeholder="Paste text to fix..."></textarea>
+            </div>
+
+            <div class="panel-section">
+              <label>Corrected Text</label>
+              <div class="output-wrapper">
+                <textarea id="grammar-output" class="answer-box" readonly></textarea>
+                <div class="loader" id="grammar-loader">
+                  <div class="loader-dot"></div>
+                  <div class="loader-dot"></div>
+                  <div class="loader-dot"></div>
+                </div>
+              </div>
+              <div class="output-actions">
+                <button class="copy-btn" data-target="grammar-output">Copy</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-actions">
+            <button class="primary-btn" id="grammar-run">Fix Grammar</button>
+          </div>
+        </div>
+
+        <!-- EMAIL WRITER -->
+        <div class="tool-card" id="email">
+          <div class="panel-grid">
+            <div class="panel-section">
+              <label>Email description</label>
+              <textarea id="email-prompt" class="prompt-box" placeholder="Describe the email..."></textarea>
+            </div>
+
+            <div class="panel-section">
+              <label>Generated Email</label>
+              <div class="output-wrapper">
+                <textarea id="email-output" class="answer-box" readonly></textarea>
+                <div class="loader" id="email-loader">
+                  <div class="loader-dot"></div>
+                  <div class="loader-dot"></div>
+                  <div class="loader-dot"></div>
+                </div>
+              </div>
+              <div class="output-actions">
+                <button class="copy-btn" data-target="email-output">Copy</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-actions">
+            <select id="email-type">
+              <option value="professional">Professional</option>
+              <option value="casual">Casual</option>
+            </select>
+
+            <select id="email-tone">
+              <option value="polite">Polite</option>
+              <option value="friendly">Friendly</option>
+              <option value="serious">Serious</option>
+            </select>
+
+            <button class="primary-btn" id="email-run">Generate Email</button>
+          </div>
+        </div>
+
+        <!-- STUDY HELPER -->
+        <div class="tool-card" id="study">
+          <div class="panel-grid">
+            <div class="panel-section">
+              <label>Topic</label>
+              <textarea id="study-input" class="prompt-box" placeholder="Enter topic to study..."></textarea>
+            </div>
+
+            <div class="panel-section">
+              <label>Study Output</label>
+              <div class="output-wrapper">
+                <textarea id="study-output" class="answer-box" readonly></textarea>
+                <div class="loader" id="study-loader">
+                  <div class="loader-dot"></div>
+                  <div class="loader-dot"></div>
+                  <div class="loader-dot"></div>
+                </div>
+              </div>
+              <div class="output-actions">
+                <button class="copy-btn" data-target="study-output">Copy</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-actions">
+            <select id="study-level">
+              <option value="beginner">Beginner</option>
+              <option value="intermediate" selected>Intermediate</option>
+              <option value="advanced">Advanced</option>
+            </select>
+
+            <select id="study-format">
+              <option value="paragraph">Paragraph</option>
+              <option value="bullet">Bullet Points</option>
+              <option value="qa">Q&A</option>
+            </select>
+
+            <button class="primary-btn" id="study-run">Explain</button>
+          </div>
+        </div>
+
+        <!-- LENGTH CONTROL -->
+        <div class="tool-card" id="length">
+          <div class="panel-grid">
+            <div class="panel-section">
+              <label>Paste your text</label>
+              <textarea id="length-input" class="prompt-box" placeholder="Paste text here..."></textarea>
+            </div>
+
+            <div class="panel-section">
+              <label>Adjusted Text</label>
+              <div class="output-wrapper">
+                <textarea id="length-output" class="answer-box" readonly></textarea>
+                <div class="loader" id="length-loader">
+                  <div class="loader-dot"></div>
+                  <div class="loader-dot"></div>
+                  <div class="loader-dot"></div>
+                </div>
+              </div>
+              <div class="output-actions">
+                <button class="copy-btn" data-target="length-output">Copy</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-actions">
+            <select id="length-mode">
+              <option value="shorten">Shorten</option>
+              <option value="expand">Expand</option>
+            </select>
+
+            <button class="primary-btn" id="length-run">Adjust</button>
+          </div>
+        </div>
+
+        <!-- TONE CHANGER -->
+        <div class="tool-card" id="tone">
+          <div class="panel-grid">
+            <div class="panel-section">
+              <label>Paste your text</label>
+              <textarea id="tone-input" class="prompt-box" placeholder="Paste text to change tone..."></textarea>
+            </div>
+
+            <div class="panel-section">
+              <label>Rewritten Text</label>
+              <div class="output-wrapper">
+                <textarea id="tone-output" class="answer-box" readonly></textarea>
+                <div class="loader" id="tone-loader">
+                  <div class="loader-dot"></div>
+                  <div class="loader-dot"></div>
+                  <div class="loader-dot"></div>
+                </div>
+              </div>
+              <div class="output-actions">
+                <button class="copy-btn" data-target="tone-output">Copy</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-actions">
+            <select id="tone-mode">
+              <option value="formal">Formal</option>
+              <option value="casual">Casual</option>
+              <option value="friendly">Friendly</option>
+              <option value="aggressive">Aggressive</option>
+              <option value="professional">Professional</option>
+              <option value="academic">Academic</option>
+            </select>
+
+            <button class="primary-btn" id="tone-run">Change Tone</button>
+          </div>
+        </div>
+
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
