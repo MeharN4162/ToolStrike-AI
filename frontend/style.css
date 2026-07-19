@@ -80,9 +80,11 @@ body {
   font-family: var(--font-main);
   background: var(--bg-main);
   color: var(--text-main);
-  overflow: hidden;
+  overflow-x: hidden;   /* keep horizontal hidden */
+  overflow-y: auto;     /* allow vertical scrolling */
   position: relative;
 }
+
 
 /* AURORA BACKGROUND LAYERS */
 body::before,
@@ -174,14 +176,15 @@ body::after {
   100% { transform: translateX(-40px); opacity: 0.35; }
 }
 
-/* APP SHELL */
 .app-shell {
   display: grid;
   grid-template-columns: 260px minmax(0, 1fr);
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;   /* allow page to grow */
+  height: auto;        /* remove trap */
+  overflow: visible;   /* allow footer */
   position: relative;
 }
+
 
 /* SIDEBAR */
 .sidebar {
