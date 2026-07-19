@@ -1118,3 +1118,10 @@ body:hover {
     overflow-y: auto;
   }
 }
+
+footer {
+  padding: 20px;
+  text-align: center;
+  margin-top: 40px;
+  display: block;
+}
