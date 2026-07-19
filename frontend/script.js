@@ -35,6 +35,65 @@ const toolInfo = {
   },
 };
 
+function showLoading() {
+  document.getElementById("loading").classList.remove("hidden");
+}
+
+function hideLoading() {
+  document.getElementById("loading").classList.add("hidden");
+}
+
+function showError(msg) {
+  document.getElementById("errorMessage").innerText = msg;
+  document.getElementById("errorBox").classList.remove("hidden");
+}
+
+function hideError() {
+  document.getElementById("errorBox").classList.add("hidden");
+}
+
+let lastEndpoint = null;
+let lastInput = null;
+let lastOptions = null;
+
+document.getElementById("retryBtn").addEventListener("click", () => {
+  hideError();
+  runTool(lastEndpoint, lastInput, lastOptions);
+});
+
+async function runTool(endpoint, input, options = {}) {
+  // Save last request for retry
+  lastEndpoint = endpoint;
+  lastInput = input;
+  lastOptions = options;
+
+  hideError();
+  showLoading();
+
+  try {
+    const response = await fetch(`https://toolstrike-ai-backend.onrender.com/${endpoint}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ input, ...options }),
+    });
+
+    const data = await response.json();
+    hideLoading();
+
+    if (data.error) {
+      showError("AI request failed — retry.");
+      return;
+    }
+
+    displayResult(data.result);
+
+  } catch (err) {
+    hideLoading();
+    showError("Network issue — retry.");
+  }
+}
+
+
 navItems.forEach((item) => {
   item.addEventListener("click", () => {
     navItems.forEach((i) => i.classList.remove("active"));
@@ -77,6 +136,13 @@ function createRandomSpaceStars(count = 80) {
 document.addEventListener("DOMContentLoaded", () => {
   createRandomSpaceStars(80);
 });
+
+function displayResult(text) {
+  const activeTool = document.querySelector(".tool-card.active");
+  const outputBox = activeTool.querySelector(".answer-box");
+  outputBox.value = text;
+}
+
 
 // COPY BUTTONS
 document.querySelectorAll(".copy-btn").forEach((btn) => {

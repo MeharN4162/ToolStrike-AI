@@ -15,8 +15,6 @@
 <div class="vortex"></div>
 <div class="grid-scan"></div>
 
-
-
 <div class="spark spark-1"></div>
 <div class="spark spark-2"></div>
 <div class="spark spark-3"></div>
@@ -362,9 +360,19 @@
 
       </section>
     </main>
+  </div> <!-- END OF .app-shell (THIS ONE IS CORRECT) -->
+
+  <!-- GLOBAL OVERLAYS (OUTSIDE .app-shell) -->
+  <div id="loading" class="loading hidden">
+    <div class="spinner"></div>
+    <p>ToolStrike is working…</p>
+  </div>
+
+  <div id="errorBox" class="error hidden">
+    <p id="errorMessage"></p>
+    <button id="retryBtn">Retry</button>
   </div>
 
   <script src="/frontend/script.js" defer></script>
 </body>
 </html>
-
