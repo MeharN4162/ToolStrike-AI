@@ -246,7 +246,8 @@ document.getElementById("tone-run").addEventListener("click", () => {
   runTool("tone", input, { mode });
 });
 
-window.addEventListener("load", () => {
+// HASH TOOL SWITCHING (RUN AFTER EVERYTHING IS LOADED)
+window.addEventListener("DOMContentLoaded", () => {
   const hash = window.location.hash.replace("#", "");
   if (hash) {
     openTool(hash);
