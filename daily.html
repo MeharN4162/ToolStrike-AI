@@ -4,8 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ToolStrike Daily Hub</title>
-
-  <!-- Load your REAL CSS -->
   <link rel="stylesheet" href="/frontend/style.css">
 </head>
 
@@ -25,6 +23,7 @@
     <!-- MAIN CONTENT -->
     <main class="main">
 
+      <!-- HEADER -->
       <header class="hub-header">
         <h1>ToolStrike Daily Hub</h1>
         <p>Your daily AI assistant for school, work, and life.</p>
@@ -35,27 +34,28 @@
         <h2>Daily essentials</h2>
         <div class="hub-grid">
 
-          <a class="hub-card" href="/frontend/index.html#summarizer">
+          <a class="hub-card" onclick="openTool('summarizer')" href="/frontend/index.html">
+
             <h3>Summarize today’s text</h3>
             <p>Homework, articles, notes, emails.</p>
           </a>
 
-          <a class="hub-card" href="/frontend/index.html#paraphraser">
+          <a class="hub-card" onclick="openTool('paraphraser')" href="/frontend/index.html">
             <h3>Rewrite today’s paragraph</h3>
             <p>Make text clearer or more professional.</p>
           </a>
 
-          <a class="hub-card" href="/frontend/index.html#grammar">
+          <a class="hub-card" onclick="openTool('grammar')" href="/frontend/index.html">
             <h3>Fix today’s grammar</h3>
             <p>Essays, messages, assignments.</p>
           </a>
 
-          <a class="hub-card" href="/frontend/index.html#email">
+          <a class="hub-card" onclick="openTool('email')" href="/frontend/index.html">
             <h3>Write today’s email</h3>
             <p>Teachers, managers, clients.</p>
           </a>
 
-          <a class="hub-card" href="/frontend/index.html#study">
+          <a class="hub-card" onclick="openTool('study')" href="/frontend/index.html">
             <h3>Generate study notes</h3>
             <p>Lectures, chapters, exam prep.</p>
           </a>
@@ -68,12 +68,12 @@
         <h2>Advanced controls</h2>
         <div class="hub-grid">
 
-          <a class="hub-card" href="/frontend/index.html#length">
+          <a class="hub-card" onclick="openTool('length')" href="/frontend/index.html">
             <h3>Control text length</h3>
             <p>Make content shorter or longer.</p>
           </a>
 
-          <a class="hub-card" href="/frontend/index.html#tone">
+          <a class="hub-card" onclick="openTool('tone')" href="/frontend/index.html">
             <h3>Change tone</h3>
             <p>Formal, friendly, professional, casual.</p>
           </a>
@@ -84,4 +84,11 @@
     </main>
   </div>
 </body>
+
+  <script>
+    function openTool(tool) {
+      window.location.href = "/frontend/index.html#" + tool;
+    }
+  </script>
+
 </html>

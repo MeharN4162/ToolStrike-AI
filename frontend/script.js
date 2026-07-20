@@ -246,3 +246,9 @@ document.getElementById("tone-run").addEventListener("click", () => {
   runTool("tone", input, { mode });
 });
 
+window.addEventListener("load", () => {
+  const hash = window.location.hash.replace("#", "");
+  if (hash) {
+    openTool(hash);
+  }
+});
