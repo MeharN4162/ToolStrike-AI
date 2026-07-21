@@ -1214,3 +1214,28 @@ footer a:hover {
   color: var(--text-muted);
 }
 
+/* =========================================
+   STOP WHOLE PAGE MOVEMENT ONLY
+   ========================================= */
+
+/* Stop page fade-in */
+.main {
+  animation: none !important;
+  transform: none !important;
+}
+
+/* Stop parallax tilt */
+body:hover {
+  animation: none !important;
+  transform: none !important;
+}
+
+/* Stop background floating */
+body::before,
+body::after,
+.app-shell::before,
+.app-shell::after,
+.fog-layer {
+  animation: none !important;
+  transform: none !important;
+}
