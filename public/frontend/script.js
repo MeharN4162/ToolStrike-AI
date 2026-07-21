@@ -6,11 +6,11 @@ const toolDesc = document.getElementById("tool-desc");
 
 const toolInfo = {
   summarizer: {
-    title: "AI Summarizer",
+    title: "Summarizer",
     desc: "Turn long text into a clean, short summary.",
   },
   paraphraser: {
-    title: "AI Paraphraser",
+    title: "Paraphraser",
     desc: "Rewrite text in a new way while keeping meaning.",
   },
   grammar: {
