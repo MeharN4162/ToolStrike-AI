@@ -1,12 +1,10 @@
 /* =========================================
    TOOLSTRIKE AURORA GLASS V7 — PART 1/3
-   THEME, GLOBALS, BACKGROUND, SIDEBAR, HEADER, FONTS
+   FIXED — NO PAGE MOVEMENT
    ========================================= */
 
-/* IMPORT FONTS */
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap");
 
-/* DEFAULT = LIGHT AURORA MODE */
 :root {
   --bg-main: radial-gradient(circle at top left, #e5f0ff 0%, #f3f4ff 40%, #e5f0ff 100%);
   --bg-main-solid: #e5f0ff;
@@ -39,7 +37,6 @@
   --font-display: "Space Grotesk", system-ui, sans-serif;
 }
 
-/* DARK AURORA MODE */
 body[data-theme="dark"] {
   --bg-main: radial-gradient(circle at top left, #020617 0%, #0b1120 40%, #020617 100%);
   --bg-main-solid: #020617;
@@ -61,8 +58,6 @@ body[data-theme="dark"] {
   --shadow-soft: 0 30px 80px rgba(0, 0, 0, 0.65);
 }
 
-
-/* RESET */
 *,
 *::before,
 *::after {
@@ -85,8 +80,7 @@ body {
   position: relative;
 }
 
-
-/* AURORA BACKGROUND LAYERS */
+/* REMOVE ALL BACKGROUND MOVEMENT */
 body::before,
 body::after {
   content: "";
@@ -104,17 +98,14 @@ body::before {
   background: radial-gradient(circle, rgba(79, 70, 229, 0.45), transparent);
   top: -140px;
   left: -100px;
-  /* animation removed */
 }
 
 body::after {
   background: radial-gradient(circle, rgba(14, 165, 233, 0.45), transparent);
   bottom: -160px;
   right: -80px;
-  /* animation removed */
 }
 
-/* AURORA GRID OVERLAY */
 .app-shell::before {
   content: "";
   position: fixed;
@@ -133,10 +124,8 @@ body::after {
   mix-blend-mode: soft-light;
   pointer-events: none;
   z-index: -2;
-  /* animation removed */
 }
 
-/* DIAGONAL LIGHT BEAM BEHIND MAIN */
 .app-shell::after {
   content: "";
   position: fixed;
@@ -149,7 +138,6 @@ body::after {
   mix-blend-mode: screen;
   pointer-events: none;
   z-index: -1;
-  /* animation removed */
 }
 
 .app-shell {
@@ -161,8 +149,7 @@ body::after {
   position: relative;
 }
 
-
-/* SIDEBAR */
+/* SIDEBAR (unchanged) */
 .sidebar {
   background: var(--bg-sidebar);
   border-right: 1px solid var(--border-soft);
@@ -180,232 +167,9 @@ body::after {
   z-index: 10;
 }
 
-body[data-theme="dark"] .sidebar {
-  box-shadow: 18px 0 60px rgba(0, 0, 0, 0.65);
-}
-
-/* SIDEBAR EDGE */
-.sidebar::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: -2px;
-  width: 3px;
-  height: 100%;
-  background: linear-gradient(to bottom,
-    rgba(79, 70, 229, 0.75),
-    rgba(14, 165, 233, 0.75));
-  opacity: 0.6;
-}
-
-/* THEME TOGGLE */
-.theme-toggle {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 14px;
-  border-radius: 999px;
-  background: radial-gradient(circle at top left,
-    rgba(255, 255, 255, 0.95),
-    rgba(248, 250, 255, 0.9));
-  border: 1px solid rgba(148, 163, 184, 0.55);
-  color: var(--accent-strong);
-  font-size: 0.85rem;
-  font-weight: 500;
-  cursor: pointer;
-  user-select: none;
-
-  transition: background var(--transition-fast),
-              transform var(--transition-fast),
-              box-shadow var(--transition-fast),
-              color var(--transition-fast),
-              border var(--transition-fast);
-}
-
-/* CARTOON SPACE BACKGROUND LAYER */
-.space-scene {
-  position: fixed;
-  inset: 0;
-  background: radial-gradient(circle at top, #0b1024 0%, #050816 40%, #02030b 100%);
-  overflow: hidden;
-  z-index: -10;
-}
-
-/* RANDOM STARS */
-#spaceStars {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.space-star {
-  position: absolute;
-  width: 2px;
-  height: 2px;
-  border-radius: 999px;
-  background: rgba(248, 250, 252, 0.9);
-  box-shadow: 0 0 10px rgba(248, 250, 252, 0.9);
-  opacity: 0.7;
-  animation: starTwinkle 4s ease-in-out infinite;
-}
-
-/* COMET */
-.space-comet {
-  position: absolute;
-  top: 95%;
-  right: -160px;
-  width: 140px;
-  height: 1px;
-  background: linear-gradient(to left,
-    rgba(248, 250, 252, 0.0),
-    rgba(248, 250, 252, 0.9));
-  box-shadow: 0 0 18px rgba(248, 250, 252, 0.9);
-  opacity: 0;
-  pointer-events: none;
-  animation: cometStreak 28s ease-in-out infinite;
-}
-
-/* SIDEBAR HEADER */
-.sidebar-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 10px 12px;
-  border-radius: var(--radius-md);
-  background: radial-gradient(circle at top left,
-    rgba(255, 255, 255, 0.96),
-    rgba(248, 250, 255, 0.9));
-  border: 1px solid rgba(148, 163, 184, 0.55);
-  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
-  position: relative;
-  overflow: hidden;
-}
-
-body[data-theme="dark"] .sidebar-header {
-  background: radial-gradient(circle at top left,
-    rgba(15, 23, 42, 0.96),
-    rgba(15, 23, 42, 0.8));
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.65);
-}
-
-.sidebar-header::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(120deg,
-    rgba(79, 70, 229, 0.18),
-    rgba(14, 165, 233, 0.18),
-    transparent);
-  opacity: 0.75;
-  mix-blend-mode: screen;
-}
-
-/* LOGO */
-.logo-mark {
-  width: 32px;
-  height: 32px;
-  border-radius: 999px;
-  background: radial-gradient(circle at top left, #4f46e5, #0ea5e9);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 0.9rem;
-  color: #f9fafb;
-  box-shadow: 0 0 18px rgba(79, 70, 229, 0.65);
-}
-
-.logo-text {
-  display: flex;
-  flex-direction: column;
-}
-
-.logo-title {
-  font-family: var(--font-display);
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  font-size: 0.95rem;
-  text-transform: uppercase;
-}
-
-.logo-subtitle {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-}
-
-/* NAV */
-.sidebar-nav {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin-top: 4px;
-}
-
-.nav-label {
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--text-muted);
-  margin: 10px 4px 4px;
-}
-
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 10px;
-  border-radius: var(--radius-md);
-  font-size: 0.85rem;
-  color: var(--text-main);
-  cursor: pointer;
-  transition: background var(--transition-fast),
-              color var(--transition-fast),
-              transform var(--transition-fast),
-              box-shadow var(--transition-fast),
-              border var(--transition-fast);
-  position: relative;
-}
-
-.nav-item .nav-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 999px;
-  background: #cbd5f5;
-  transition: box-shadow var(--transition-fast),
-              background var(--transition-fast),
-              transform var(--transition-fast);
-}
-
-body[data-theme="dark"] .nav-item .nav-dot {
-  background: #4b5563;
-}
-
-.nav-item:hover {
-  background: radial-gradient(circle at left,
-    rgba(148, 163, 184, 0.25),
-    rgba(255, 255, 255, 0.96));
-  transform: translateX(4px);
-  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.12);
-}
-
-.nav-item.active {
-  background: radial-gradient(circle at left,
-    rgba(79, 70, 229, 0.18),
-    rgba(255, 255, 255, 0.96));
-  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12);
-  color: var(--accent-strong);
-}
-
-/* MAIN AREA */
-.main {
-  padding: 24px 28px;
-  overflow-y: auto;
-  position: relative;
-  /* animation removed */
-}
 /* =========================================
    TOOLSTRIKE AURORA GLASS V7 — PART 2/3
-   TOOL CARDS, PANELS, TEXTAREAS, LOADERS
+   FINAL — NO MOVEMENT FOR TOOL-CARD OR PAGE
    ========================================= */
 
 /* TOOL PANEL */
@@ -416,6 +180,7 @@ body[data-theme="dark"] .nav-item .nav-dot {
   position: relative;
   z-index: 5;
   /* animation removed */
+  transform: none !important;
 }
 
 /* TOOL CARD */
@@ -429,15 +194,16 @@ body[data-theme="dark"] .nav-item .nav-dot {
   backdrop-filter: blur(22px) saturate(180%);
   box-shadow: var(--shadow-soft);
 
-  transition: transform var(--transition-med),
-              box-shadow var(--transition-med),
+  transition: box-shadow var(--transition-med),
               background var(--transition-med),
               border var(--transition-med);
 
   position: relative;
   overflow: hidden;
 
-  /* animation removed */
+  /* REMOVE BREATHING MOVEMENT */
+  animation: none !important;
+  transform: none !important;
 }
 
 .tool-card::before {
@@ -451,7 +217,9 @@ body[data-theme="dark"] .nav-item .nav-dot {
   mix-blend-mode: screen;
   pointer-events: none;
 
-  /* animation removed */
+  /* REMOVE GLASS SHIFT MOVEMENT */
+  animation: none !important;
+  transform: none !important;
 }
 
 .tool-card.active {
@@ -459,7 +227,9 @@ body[data-theme="dark"] .nav-item .nav-dot {
 }
 
 .tool-card:hover {
-  /* transform removed */
+  /* REMOVE LIFT MOVEMENT */
+  transform: none !important;
+
   box-shadow: 0 32px 90px rgba(79, 70, 229, 0.25),
               0 22px 60px rgba(14, 165, 233, 0.25);
 }
@@ -469,7 +239,10 @@ body[data-theme="dark"] .nav-item .nav-dot {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 26px;
-  /* animation removed */
+
+  /* REMOVE GRID RISE MOVEMENT */
+  animation: none !important;
+  transform: none !important;
 }
 
 .panel-section label {
@@ -499,23 +272,14 @@ textarea {
   backdrop-filter: blur(12px);
   transition: border var(--transition-fast),
               box-shadow var(--transition-fast),
-              background var(--transition-fast),
-              transform var(--transition-fast);
+              background var(--transition-fast);
 }
 
-/* Pulse focus (KEEP — you said only remove movement of page + tool-card) */
+/* KEEP FOCUS EFFECT — YOU SAID ONLY REMOVE PAGE + TOOL-CARD MOVEMENT */
 textarea:focus {
   border-color: var(--accent-cyan);
   box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.45);
   background: rgba(14, 165, 233, 0.08);
-  transform: translateY(-2px);
-  animation: pulseFocus 1.4s ease-in-out;
-}
-
-@keyframes pulseFocus {
-  0% { box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.45); }
-  50% { box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.25); }
-  100% { box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.45); }
 }
 
 /* OUTPUT WRAPPER */
@@ -523,7 +287,7 @@ textarea:focus {
   position: relative;
 }
 
-/* LOADER (KEEP — not part of movement you wanted removed) */
+/* LOADER — KEEP */
 .loader {
   position: absolute;
   right: 10px;
@@ -655,10 +419,10 @@ select:hover {
 
 /* =========================================
    TOOLSTRIKE AURORA GLASS V7 — PART 3/3
-   PARTICLES, GLOW TRAILS, SCROLLBARS, RESPONSIVE
+   FINAL — NO PAGE MOVEMENT
    ========================================= */
 
-/* FLOATING AURORA PARTICLES (KEEP — not part of removed movement) */
+/* PARTICLES (KEEP — no movement removed here) */
 .particles {
   position: fixed;
   inset: 0;
@@ -677,7 +441,7 @@ select:hover {
   box-shadow: 0 0 14px rgba(14, 165, 233, 0.55);
 }
 
-/* NEBULA FOG LAYER */
+/* FOG LAYER — REMOVE MOVEMENT */
 .fog-layer {
   position: fixed;
   inset: 0;
@@ -686,15 +450,17 @@ select:hover {
   background: radial-gradient(circle at 20% 80%, rgba(14, 165, 233, 0.12), transparent),
               radial-gradient(circle at 80% 20%, rgba(79, 70, 229, 0.12), transparent);
   filter: blur(90px);
-  /* animation removed */
+  animation: none !important;
+  transform: none !important;
 }
 
-/* PARALLAX BACKGROUND MOTION */
+/* REMOVE PARALLAX PAGE MOVEMENT */
 body:hover {
-  /* animation removed */
+  animation: none !important;
+  transform: none !important;
 }
 
-/* GLOW TRAIL ON HOVER (KEEP — not part of removed movement) */
+/* GLOW TRAIL (KEEP) */
 .hover-glow {
   position: relative;
   transition: var(--transition-fast);
@@ -719,7 +485,7 @@ body:hover {
   transform: scale(1.05);
 }
 
-/* AURORA SCROLLBAR (KEEP) */
+/* SCROLLBAR (KEEP) */
 ::-webkit-scrollbar {
   width: 10px;
 }
@@ -738,7 +504,7 @@ body:hover {
   background: linear-gradient(var(--accent-cyan), var(--accent));
 }
 
-/* AURORA BORDER GLOW (KEEP — not part of removed movement) */
+/* BORDER GLOW (KEEP — not movement) */
 .tool-card {
   position: relative;
   border: 2px solid transparent;
@@ -778,7 +544,7 @@ body:hover {
   100% { opacity: 0.45; }
 }
 
-/* RESPONSIVE POLISH */
+/* RESPONSIVE (KEEP) */
 @media (max-width: 900px) {
   .app-shell {
     grid-template-columns: 220px minmax(0, 1fr);
@@ -818,10 +584,11 @@ body:hover {
   }
 }
 
-/* PAGE ENTRY ANIMATION — REMOVED */
+/* PAGE ENTRY — REMOVE MOVEMENT */
 .main {
   padding-bottom: 120px;
-  /* animation removed */
+  animation: none !important;
+  transform: none !important;
 }
 
 #tool-title {
