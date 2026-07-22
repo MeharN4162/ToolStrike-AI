@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
-const MODEL = "llama-3.1-8b-instant";
+const MODEL = "llama3-70b-8192";
 
 // UNIVERSAL AI CALLER
 async function callGroq(messages) {
