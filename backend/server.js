@@ -37,9 +37,20 @@ async function callGroq(messages) {
   return { content: data.choices[0].message.content.trim() };
 }
 
+// SAFE BODY CHECKER (GLOBAL FIX)
+function requireInput(req, res) {
+  if (!req.body || !req.body.input) {
+    return res.status(400).json({ error: "Missing input." });
+  }
+  return null;
+}
+
 // SUMMARIZER
 app.post("/summarizer", async (req, res) => {
-  const { input, length } = req.body;
+  if (requireInput(req, res)) return;
+
+  const input = req.body.input;
+  const length = req.body.length;
 
   const lengthLabel =
     length === "short" ? "very short" :
@@ -61,7 +72,10 @@ app.post("/summarizer", async (req, res) => {
 
 // PARAPHRASER
 app.post("/paraphraser", async (req, res) => {
-  const { input, tone } = req.body;
+  if (requireInput(req, res)) return;
+
+  const input = req.body.input;
+  const tone = req.body.tone;
 
   const toneLabel =
     tone === "formal" ? "more formal" :
@@ -83,7 +97,9 @@ app.post("/paraphraser", async (req, res) => {
 
 // GRAMMAR FIXER
 app.post("/grammar", async (req, res) => {
-  const { input } = req.body;
+  if (requireInput(req, res)) return;
+
+  const input = req.body.input;
 
   try {
     const { content, error } = await callGroq([
@@ -100,7 +116,11 @@ app.post("/grammar", async (req, res) => {
 
 // EMAIL WRITER
 app.post("/email", async (req, res) => {
-  const { input, type, tone } = req.body;
+  if (requireInput(req, res)) return;
+
+  const input = req.body.input;
+  const type = req.body.type;
+  const tone = req.body.tone;
 
   try {
     const { content, error } = await callGroq([
@@ -117,7 +137,11 @@ app.post("/email", async (req, res) => {
 
 // STUDY HELPER
 app.post("/study", async (req, res) => {
-  const { input, level, format } = req.body;
+  if (requireInput(req, res)) return;
+
+  const input = req.body.input;
+  const level = req.body.level;
+  const format = req.body.format;
 
   const levelLabel =
     level === "advanced" ? "advanced" :
@@ -144,7 +168,10 @@ app.post("/study", async (req, res) => {
 
 // LENGTH CONTROL
 app.post("/length", async (req, res) => {
-  const { input, mode } = req.body;
+  if (requireInput(req, res)) return;
+
+  const input = req.body.input;
+  const mode = req.body.mode;
 
   const action = mode === "expand" ? "Expand" : "Shorten";
 
@@ -163,7 +190,10 @@ app.post("/length", async (req, res) => {
 
 // TONE CHANGER
 app.post("/tone", async (req, res) => {
-  const { input, mode } = req.body;
+  if (requireInput(req, res)) return;
+
+  const input = req.body.input;
+  const mode = req.body.mode;
 
   try {
     const { content, error } = await callGroq([
