@@ -2,23 +2,58 @@
 <html lang="en">
 <head>
 
-  <meta name="google-site-verification" content="4w0xgTOI-rlzSBCQejK4mNSpxc_nTvIlChiWxcWS4Hc" />
+  <!-- Google Verification -->
+  <meta name="google-site-verification" content="4w0xgTOI-rlzSBCQejK4mNSpxc_nTvIlChiWxcWS4Hc">
 
+  <!-- Cache Control -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
 
+  <!-- Google AdSense -->
   <meta name="google-adsense-account" content="ca-pub-7005459782661796">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7005459782661796" crossorigin="anonymous"></script>
 
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ToolStrike AI</title>
+  <!-- Basic Meta -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7005459782661796"
-    crossorigin="anonymous"></script>
-    
-  <!-- CSS is in the same folder as this file. -->
+  <!-- Title -->
+  <title>ToolStrike AI – Smart Multi‑Tool Workspace</title>
+
+  <!-- SEO Meta -->
+  <meta name="description" content="ToolStrike AI is a multi-tool workspace offering summarization, paraphrasing, grammar correction, email writing, study help, tone changing, and more.">
+  <meta name="keywords" content="AI tools, summarizer, paraphraser, grammar checker, email writer, study helper, tone changer, ToolStrike AI">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="ToolStrike AI – Smart Multi‑Tool Workspace">
+  <meta property="og:description" content="Summarize, paraphrase, correct grammar, write emails, study better, and more with ToolStrike AI.">
+  <meta property="og:url" content="https://tool-strike-ai.vercel.app/">
+  <meta property="og:type" content="website">
+
+  <!-- Stylesheet -->
   <link rel="stylesheet" href="/frontend/style.css">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "ToolStrike AI",
+    "url": "https://tool-strike-ai.vercel.app/",
+    "description": "ToolStrike AI is a multi-tool workspace offering summarization, paraphrasing, grammar correction, email writing, study help, tone changing, and more.",
+    "applicationCategory": "Utility",
+    "operatingSystem": "All"
+  }
+  </script>
+
+  <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+
+
 </head>
 
 <body data-theme="dark">
@@ -28,7 +63,26 @@
     ToolStrike AI is a multi-tool workspace offering summarization, paraphrasing,
     grammar correction, email writing, study help, tone changing, and more.
   </div>
-  
+
+  <!-- ABOUT SECTION (moved out of head) -->
+  <section id="about" style="padding:20px; color:white;">
+    <h2>About ToolStrike AI</h2>
+    <p>
+      ToolStrike AI is a multi-tool workspace designed to help users summarize text,
+      paraphrase content, correct grammar, write emails, study more effectively,
+      and adjust tone. Built for speed, simplicity, and accuracy.
+    </p>
+  </section>
+
+  <!-- INTERNAL LINKS (for Google crawling) -->
+  <nav class="internal-links" style="padding:10px; color:white;">
+    <a href="#summarizer">Summarizer</a> |
+    <a href="#email">Email Writer</a> |
+    <a href="#study">Study Helper</a> |
+    <a href="#tone">Tone Changer</a>
+  </nav>
+
+  <!-- BACKGROUND EFFECTS -->
   <div class="starfield"></div>
   <div class="fog-layer"></div>
   <div class="aurora-ribbon"></div>
@@ -41,16 +95,14 @@
   <div class="spark spark-3"></div>
   <div class="spark spark-4"></div>
 
-  <!-- CARTOON SPACE SCENE (Behind UI) -->
+  <!-- CARTOON SPACE SCENE -->
   <div class="space-scene">
-    <!-- RANDOM STARS CONTAINER -->
     <div id="spaceStars"></div>
-
-    <!-- COMET -->
     <div class="space-comet"></div>
   </div>
 
   <div class="app-shell">
+
     <!-- SIDEBAR -->
     <aside class="sidebar">
       <div class="sidebar-header">
@@ -99,17 +151,9 @@
           <span>Tone Changer</span>
         </div>
       </nav>
-
-      <div class="sidebar-footer">
-        <div id="themeToggle" class="theme-toggle">
-          <span class="theme-icon">🌙</span>
-          <span class="theme-label">Dark</span>
-        </div>
-        <div class="sidebar-note">
-          Built by Mehar · ToolStrike v2.0
-        </div>
-      </div>
     </aside>
+
+    <!-- Your remaining UI continues here… -->
 
     <!-- MAIN AREA -->
     <main class="main">
