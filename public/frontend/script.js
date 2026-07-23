@@ -318,31 +318,7 @@ function renderDiff(oldText, newText, container) {
   });
 }
 
-// AMBIENT STAGE — drifting glow orbs + "generating" status while a tool runs
-function spawnAmbientOrbs(count = 5) {
-  const stage = document.getElementById("ambientStage");
-  if (!stage) return;
-  const colors = [
-    "rgba(139, 147, 255, 0.55)",
-    "rgba(94, 230, 255, 0.55)",
-    "rgba(79, 70, 229, 0.5)",
-    "rgba(14, 165, 233, 0.5)",
-  ];
-
-  for (let i = 0; i < count; i++) {
-    const orb = document.createElement("div");
-    orb.className = "ambient-orb";
-    const size = 50 + Math.random() * 90;
-    orb.style.top = `${5 + Math.random() * 75}%`;
-    orb.style.width = `${size}px`;
-    orb.style.height = `${size}px`;
-    orb.style.background = colors[i % colors.length];
-    orb.style.animationDuration = `${9 + Math.random() * 10}s`;
-    orb.style.animationDelay = `${Math.random() * 8}s`;
-    stage.appendChild(orb);
-  }
-}
-
+// AMBIENT STAGE — "generating" status while a tool runs (the passing glow is pure CSS, see .ambient-stage::before)
 let ambientTypeTimer = null;
 
 function typeAmbientText(text) {
@@ -372,7 +348,6 @@ function clearAmbientBusy() {
   if (el) el.textContent = "";
 }
 
-document.addEventListener("DOMContentLoaded", () => spawnAmbientOrbs(5));
 
 document.querySelectorAll(".prompt-box, .answer-box").forEach((textarea) => {
   const section = textarea.closest(".panel-section");
@@ -571,7 +546,7 @@ if (themeToggle) {
 }
 
 // API CALL FUNCTION
-const AMBIENT_MIN_VISIBLE_MS = 1600;
+const AMBIENT_MIN_VISIBLE_MS = 3400;
 
 function wait(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));

@@ -8,20 +8,20 @@
 
 /* DEFAULT = LIGHT AURORA MODE */
 :root {
-  --bg-main: radial-gradient(circle at top left, #e5f0ff 0%, #f3f4ff 40%, #e5f0ff 100%);
+  --bg-main: radial-gradient(circle at top left, #dce8ff 0%, #eef0ff 35%, #ffe8f7 70%, #dce8ff 100%);
   --bg-main-solid: #e5f0ff;
 
   --bg-sidebar: rgba(255, 255, 255, 0.88);
   --bg-card: rgba(255, 255, 255, 0.94);
   --bg-textarea: rgba(248, 250, 255, 0.94);
-  --space-bg: radial-gradient(circle at top, #f8fbff 0%, #e7efff 48%, #dbeafe 100%);
-  --space-star: rgba(30, 64, 175, 0.45);
-  --grid-line: rgba(79, 70, 229, 0.08);
-  --beam-color: rgba(14, 165, 233, 0.16);
-  --ambient-violet: rgba(79, 70, 229, 0.22);
-  --ambient-cyan: rgba(14, 165, 233, 0.24);
-  --space-sweep: rgba(14, 165, 233, 0.12);
-  --space-glow: rgba(79, 70, 229, 0.1);
+  --space-bg: radial-gradient(circle at top, #fdf3ff 0%, #e9f0ff 45%, #d6e6ff 100%);
+  --space-star: rgba(67, 56, 202, 0.85);
+  --grid-line: rgba(79, 70, 229, 0.14);
+  --beam-color: rgba(14, 165, 233, 0.26);
+  --ambient-violet: rgba(79, 70, 229, 0.32);
+  --ambient-cyan: rgba(14, 165, 233, 0.34);
+  --space-sweep: rgba(168, 85, 247, 0.24);
+  --space-glow: rgba(79, 70, 229, 0.2);
 
   --accent: #4f46e5;
   --accent-soft: rgba(79, 70, 229, 0.18);
@@ -33,7 +33,7 @@
 
   --border-soft: rgba(148, 163, 184, 0.45);
 
-  --shadow-soft: 0 24px 60px rgba(15, 23, 42, 0.18);
+  --shadow-soft: 0 24px 60px rgba(79, 70, 229, 0.16);
 
   --radius-lg: 22px;
   --radius-md: 14px;
@@ -399,26 +399,6 @@ body[data-theme="dark"] .theme-thumb {
   background: linear-gradient(90deg, transparent, var(--space-sweep), transparent);
   filter: blur(10px);
   animation: ambientScan 8s ease-in-out infinite;
-}
-
-/* DRIFTING GLOW ORBS (random, generated via JS) */
-.ambient-orb {
-  position: absolute;
-  border-radius: 999px;
-  filter: blur(18px);
-  opacity: 0;
-  pointer-events: none;
-  animation-name: ambientOrbDrift;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
-}
-
-@keyframes ambientOrbDrift {
-  0% { transform: translateX(-20%) scale(0.75); opacity: 0; }
-  15% { opacity: 0.9; }
-  50% { transform: translateX(60%) scale(1.2); opacity: 1; }
-  85% { opacity: 0.5; }
-  100% { transform: translateX(140%) scale(0.75); opacity: 0; }
 }
 
 .ambient-content {
