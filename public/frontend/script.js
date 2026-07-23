@@ -3,6 +3,7 @@ const navItems = document.querySelectorAll(".nav-item");
 const toolCards = document.querySelectorAll(".tool-card");
 const toolTitle = document.getElementById("tool-title");
 const toolDesc = document.getElementById("tool-desc");
+const mobileToolSelect = document.getElementById("mobile-tool-select");
 
 const toolInfo = {
   summarizer: {
@@ -50,6 +51,7 @@ function openTool(tool) {
   // Update header
   toolTitle.textContent = toolInfo[tool].title;
   toolDesc.textContent = toolInfo[tool].desc;
+  if (mobileToolSelect) mobileToolSelect.value = tool;
 }
 
 // Sidebar click switching
@@ -59,6 +61,10 @@ navItems.forEach((item) => {
     openTool(target);
   });
 });
+
+if (mobileToolSelect) {
+  mobileToolSelect.addEventListener("change", () => openTool(mobileToolSelect.value));
+}
 
 // ⭐ HASH SWITCHING — WORKS WITH DAILY HUB
 window.addEventListener("DOMContentLoaded", () => {
@@ -113,6 +119,73 @@ document.querySelectorAll(".copy-btn").forEach((btn) => {
   });
 });
 
+// EDITOR CONTROLS
+function formatCount(value) {
+  const characters = value.length;
+  const words = value.trim() ? value.trim().split(/\s+/).length : 0;
+  return `${words} words · ${characters} characters`;
+}
+
+function downloadText(filename, text) {
+  const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+document.querySelectorAll(".prompt-box, .answer-box").forEach((textarea) => {
+  const section = textarea.closest(".panel-section");
+  const toolbar = document.createElement("div");
+  toolbar.className = "editor-toolbar";
+
+  const counter = document.createElement("span");
+  counter.className = "editor-count";
+  const updateCount = () => {
+    counter.textContent = formatCount(textarea.value);
+  };
+  textarea.addEventListener("input", updateCount);
+  updateCount();
+  toolbar.appendChild(counter);
+
+  const expandButton = document.createElement("button");
+  expandButton.type = "button";
+  expandButton.className = "editor-btn";
+  expandButton.textContent = "Expand";
+  expandButton.addEventListener("click", () => {
+    section.classList.toggle("editor-expanded");
+    expandButton.textContent = section.classList.contains("editor-expanded") ? "Collapse" : "Expand";
+  });
+  toolbar.appendChild(expandButton);
+
+  if (textarea.classList.contains("prompt-box")) {
+    const clearButton = document.createElement("button");
+    clearButton.type = "button";
+    clearButton.className = "editor-btn";
+    clearButton.textContent = "Clear";
+    clearButton.addEventListener("click", () => {
+      textarea.value = "";
+      textarea.dispatchEvent(new Event("input"));
+      textarea.focus();
+    });
+    toolbar.appendChild(clearButton);
+  } else {
+    const downloadButton = document.createElement("button");
+    downloadButton.type = "button";
+    downloadButton.className = "editor-btn";
+    downloadButton.textContent = "Download";
+    downloadButton.addEventListener("click", () => {
+      const tool = textarea.id.replace("-output", "");
+      downloadText(`toolstrike-${tool}.txt`, textarea.value);
+    });
+    toolbar.appendChild(downloadButton);
+  }
+
+  textarea.insertAdjacentElement("afterend", toolbar);
+});
+
 // THEME TOGGLE
 const themeToggle = document.getElementById("themeToggle");
 if (themeToggle) {
@@ -137,11 +210,13 @@ if (themeToggle) {
 async function runTool(endpoint, input, options = {}) {
   const loader = document.getElementById(`${endpoint}-loader`);
   const output = document.getElementById(`${endpoint}-output`);
+  const runButton = document.getElementById(`${endpoint}-run`);
 
   if (!loader || !output) return;
 
   loader.classList.add("active");
   output.value = "";
+  if (runButton) runButton.disabled = true;
 
   try {
     const response = await fetch(`https://toolstrike-ai-backend.onrender.com/${endpoint}`, {
@@ -156,6 +231,7 @@ async function runTool(endpoint, input, options = {}) {
     output.value = "Error connecting to backend.";
   } finally {
     loader.classList.remove("active");
+    if (runButton) runButton.disabled = false;
   }
 }
 
