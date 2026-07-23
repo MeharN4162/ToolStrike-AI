@@ -229,8 +229,9 @@ if (themeToggle) {
   const updateThemeLabel = () => {
     const isDark = document.body.getAttribute("data-theme") === "dark";
     const label = document.querySelector(".theme-label");
-    if (label) label.textContent = isDark ? "Light mode" : "Dark mode";
+    if (label) label.textContent = isDark ? "Dark" : "Light";
     themeToggle.setAttribute("aria-pressed", String(isDark));
+    themeToggle.setAttribute("aria-label", isDark ? "Switch to light theme" : "Switch to dark theme");
   };
 
   updateThemeLabel();

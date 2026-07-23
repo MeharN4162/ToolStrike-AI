@@ -289,6 +289,10 @@ body[data-theme="dark"] .sidebar {
   transition: background var(--transition-med);
 }
 
+body[data-theme="dark"] .theme-track {
+  background: var(--accent);
+}
+
 .theme-thumb {
   width: 16px;
   height: 16px;
@@ -371,6 +375,11 @@ body[data-theme="dark"] .theme-thumb {
   transform: translateY(-1px);
   box-shadow: 0 10px 26px rgba(14, 165, 233, 0.35);
   border-color: rgba(14, 165, 233, 0.65);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 3px;
 }
 
 .theme-label {
