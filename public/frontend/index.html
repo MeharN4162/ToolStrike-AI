@@ -149,16 +149,12 @@
           <div class="dna-strand"></div>
           <div class="badge">Groq‑Powered</div>
           <div class="badge badge-secondary">Local Dev</div>
+          <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle light and dark theme" aria-pressed="false">
+            <span class="theme-label">Light</span>
+            <span class="theme-track" aria-hidden="true"><span class="theme-thumb"></span></span>
+          </button>
         </div>
       </header>
-
-      <div class="workspace-controls">
-        <span class="control-caption">Workspace theme</span>
-        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle light and dark theme" aria-pressed="false">
-          <span class="theme-label">Light</span>
-          <span class="theme-track" aria-hidden="true"><span class="theme-thumb"></span></span>
-        </button>
-      </div>
 
       <div class="mobile-tool-picker">
         <label for="mobile-tool-select">Tool</label>
@@ -428,12 +424,7 @@
 
       </section>
 
-      <div class="ambient-stage" aria-hidden="true">
-        <span class="ambient-orbit orbit-one"></span>
-        <span class="ambient-orbit orbit-two"></span>
-        <span class="ambient-orbit orbit-three"></span>
-        <span class="ambient-signal"></span>
-      </div>
+      <div class="ambient-stage" aria-hidden="true"></div>
     </main>
   </div> <!-- END OF .app-shell -->
 

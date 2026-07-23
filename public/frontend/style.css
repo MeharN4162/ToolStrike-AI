@@ -240,21 +240,6 @@ body[data-theme="dark"] .sidebar {
 }
 
 /* THEME TOGGLE */
-.workspace-controls {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 10px;
-  margin: -8px 0 18px;
-}
-
-.control-caption {
-  color: var(--text-muted);
-  font-size: 0.72rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
 .theme-toggle {
   display: flex;
   align-items: center;
@@ -388,76 +373,55 @@ body[data-theme="dark"] .theme-thumb {
               letter-spacing var(--transition-fast);
 }
 
-/* AMBIENT WORKSPACE STAGE */
+/* AMBIENT WORKSPACE GRID */
 .ambient-stage {
   position: relative;
-  height: 170px;
+  height: 150px;
   margin-top: 18px;
   overflow: hidden;
   border: 1px solid var(--border-soft);
   border-radius: var(--radius-lg);
-  background: linear-gradient(135deg, rgba(14, 165, 233, 0.04), rgba(79, 70, 229, 0.08), transparent 70%);
+  background-color: rgba(14, 165, 233, 0.03);
+  background-image: linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 28px 28px;
   opacity: 0.88;
+  animation: ambientGridDrift 18s linear infinite;
 }
 
 .ambient-stage::before {
   content: "";
   position: absolute;
-  inset: 22px 10%;
-  border: 1px solid var(--accent-soft);
-  border-radius: 50%;
-  transform: rotate(-8deg) perspective(300px) rotateX(62deg);
-  box-shadow: 0 0 42px var(--accent-soft);
+  top: 0;
+  bottom: 0;
+  left: -20%;
+  width: 28%;
+  background: linear-gradient(90deg, transparent, var(--space-sweep), transparent);
+  filter: blur(10px);
+  animation: ambientScan 8s ease-in-out infinite;
 }
 
-.ambient-orbit,
-.ambient-signal {
+.ambient-stage::after {
+  content: "SYSTEM FIELD // TOOLSTRIKE AI";
   position: absolute;
-  display: block;
-  border-radius: 50%;
-  pointer-events: none;
+  right: 18px;
+  bottom: 14px;
+  color: var(--text-muted);
+  font-family: var(--font-display);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  opacity: 0.6;
 }
 
-.ambient-orbit {
-  width: 8px;
-  height: 8px;
-  background: var(--accent-cyan);
-  box-shadow: 0 0 18px var(--accent-cyan);
+@keyframes ambientGridDrift {
+  from { background-position: 0 0; }
+  to { background-position: 56px 28px; }
 }
 
-.orbit-one { left: 24%; top: 52%; animation: orbitFloatOne 8s ease-in-out infinite; }
-.orbit-two { left: 68%; top: 32%; width: 5px; height: 5px; animation: orbitFloatTwo 11s ease-in-out infinite; }
-.orbit-three { left: 82%; top: 68%; width: 6px; height: 6px; animation: orbitFloatThree 9s ease-in-out infinite; }
-
-.ambient-signal {
-  left: 50%;
-  top: 50%;
-  width: 4px;
-  height: 4px;
-  background: var(--accent-strong);
-  box-shadow: 0 0 0 0 var(--accent-soft);
-  animation: signalPulse 3.6s ease-out infinite;
-}
-
-@keyframes orbitFloatOne {
-  0%, 100% { transform: translate(0, 12px); }
-  50% { transform: translate(180px, -40px); }
-}
-
-@keyframes orbitFloatTwo {
-  0%, 100% { transform: translate(-30px, 20px); }
-  50% { transform: translate(-220px, 70px); }
-}
-
-@keyframes orbitFloatThree {
-  0%, 100% { transform: translate(0, 0); }
-  50% { transform: translate(-120px, -60px); }
-}
-
-@keyframes signalPulse {
-  0% { box-shadow: 0 0 0 0 var(--accent-soft); opacity: 1; }
-  70% { box-shadow: 0 0 0 32px transparent; opacity: 0.2; }
-  100% { box-shadow: 0 0 0 32px transparent; opacity: 0; }
+@keyframes ambientScan {
+  0%, 100% { transform: translateX(0); opacity: 0; }
+  20%, 70% { opacity: 0.8; }
+  85% { transform: translateX(480%); opacity: 0; }
 }
 
 .theme-toggle:hover .theme-label {
@@ -1241,6 +1205,10 @@ body:hover {
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
+  }
+
+  .header-right {
+    flex-wrap: wrap;
   }
 
   .mobile-tool-picker {
