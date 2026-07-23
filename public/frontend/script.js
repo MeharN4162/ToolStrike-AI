@@ -152,6 +152,244 @@ function downloadText(filename, text) {
   URL.revokeObjectURL(url);
 }
 
+function downloadMarkdown(tool, title, text) {
+  const content = `# ${title} Result\n\n${text}\n`;
+  const blob = new Blob([content], { type: "text/markdown;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `toolstrike-${tool}.md`;
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+function downloadPdf(title, text) {
+  const win = window.open("", "_blank");
+  if (!win) {
+    showToast("Allow pop-ups to export as PDF");
+    return;
+  }
+  const escaped = text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\n/g, "<br>");
+  win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${title}</title>
+    <style>body{font-family:Georgia,serif;max-width:720px;margin:40px auto;line-height:1.6;color:#111;padding:0 20px;}h1{font-family:sans-serif;}</style>
+    </head><body><h1>${title}</h1><p>${escaped}</p>
+    <script>window.onload = () => window.print();<\/script>
+    </body></html>`);
+  win.document.close();
+}
+
+// HISTORY (per tool, stored locally)
+const HISTORY_LIMIT = 15;
+
+function historyKey(tool) {
+  return `toolstrike-history-${tool}`;
+}
+
+function escapeHtml(str) {
+  const div = document.createElement("div");
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function loadHistory(tool) {
+  try {
+    return JSON.parse(localStorage.getItem(historyKey(tool))) || [];
+  } catch {
+    return [];
+  }
+}
+
+function saveHistoryEntry(tool, input, output) {
+  if (!input || !output) return;
+  const entries = loadHistory(tool);
+  entries.unshift({ time: Date.now(), input, output });
+  localStorage.setItem(historyKey(tool), JSON.stringify(entries.slice(0, HISTORY_LIMIT)));
+}
+
+function formatHistoryTime(ts) {
+  const diff = Date.now() - ts;
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return "just now";
+  if (mins < 60) return `${mins}m ago`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours}h ago`;
+  return `${Math.floor(hours / 24)}d ago`;
+}
+
+function renderHistoryPanel(tool, panel, inputBox, outputBox) {
+  const entries = loadHistory(tool);
+  panel.innerHTML = "";
+
+  if (!entries.length) {
+    const empty = document.createElement("p");
+    empty.className = "history-empty";
+    empty.textContent = "No past results yet for this tool.";
+    panel.appendChild(empty);
+    return;
+  }
+
+  const clearRow = document.createElement("div");
+  clearRow.className = "history-clear-row";
+  const clearBtn = document.createElement("button");
+  clearBtn.type = "button";
+  clearBtn.textContent = "Clear history";
+  clearBtn.addEventListener("click", () => {
+    localStorage.removeItem(historyKey(tool));
+    renderHistoryPanel(tool, panel, inputBox, outputBox);
+    showToast("History cleared");
+  });
+  clearRow.appendChild(clearBtn);
+  panel.appendChild(clearRow);
+
+  entries.forEach((entry) => {
+    const item = document.createElement("button");
+    item.type = "button";
+    item.className = "history-entry";
+    const snippet = entry.input.slice(0, 60).replace(/\s+/g, " ");
+    const truncated = entry.input.length > 60 ? "…" : "";
+    item.innerHTML = `<span class="history-time">${escapeHtml(formatHistoryTime(entry.time))}</span><span class="history-snippet">${escapeHtml(snippet)}${truncated}</span>`;
+    item.addEventListener("click", () => {
+      if (inputBox) {
+        inputBox.value = entry.input;
+        inputBox.dispatchEvent(new Event("input"));
+      }
+      outputBox.value = entry.output;
+      updateEditorCount(outputBox);
+      panel.classList.remove("open");
+      showToast("Restored from history");
+    });
+    panel.appendChild(item);
+  });
+}
+
+// WORD-LEVEL DIFF (for Grammar Fixer)
+function computeWordDiff(oldText, newText) {
+  const oldWords = oldText.split(/(\s+)/).filter((w) => w.length);
+  const newWords = newText.split(/(\s+)/).filter((w) => w.length);
+  const m = oldWords.length;
+  const n = newWords.length;
+  const dp = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(0));
+
+  for (let i = m - 1; i >= 0; i--) {
+    for (let j = n - 1; j >= 0; j--) {
+      dp[i][j] = oldWords[i] === newWords[j] ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
+    }
+  }
+
+  const result = [];
+  let i = 0;
+  let j = 0;
+  while (i < m && j < n) {
+    if (oldWords[i] === newWords[j]) {
+      result.push({ type: "equal", text: oldWords[i] });
+      i++;
+      j++;
+    } else if (dp[i + 1][j] >= dp[i][j + 1]) {
+      result.push({ type: "removed", text: oldWords[i] });
+      i++;
+    } else {
+      result.push({ type: "added", text: newWords[j] });
+      j++;
+    }
+  }
+  while (i < m) {
+    result.push({ type: "removed", text: oldWords[i] });
+    i++;
+  }
+  while (j < n) {
+    result.push({ type: "added", text: newWords[j] });
+    j++;
+  }
+  return result;
+}
+
+function renderDiff(oldText, newText, container) {
+  container.innerHTML = "";
+  computeWordDiff(oldText, newText).forEach((part) => {
+    const span = document.createElement("span");
+    if (part.type === "removed") span.className = "diff-removed";
+    else if (part.type === "added") span.className = "diff-added";
+    span.textContent = `${part.text} `;
+    container.appendChild(span);
+  });
+}
+
+// DAILY STREAK TRACKER
+const STREAK_KEY = "toolstrike-streak";
+
+function getStreakState() {
+  try {
+    return JSON.parse(localStorage.getItem(STREAK_KEY)) || { lastDate: null, count: 0 };
+  } catch {
+    return { lastDate: null, count: 0 };
+  }
+}
+
+function todayStr() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function renderStreakBadge(count) {
+  const headerRight = document.querySelector(".header-right");
+  if (!headerRight) return;
+  let badge = document.getElementById("streakBadge");
+  if (!badge) {
+    badge = document.createElement("div");
+    badge.id = "streakBadge";
+    badge.className = "badge badge-streak";
+    const themeToggle = headerRight.querySelector(".theme-toggle");
+    headerRight.insertBefore(badge, themeToggle || null);
+  }
+  badge.textContent = count > 0 ? `🔥 ${count} day${count === 1 ? "" : "s"} streak` : "🔥 Start your streak";
+}
+
+function recordUsageToday() {
+  const state = getStreakState();
+  const today = todayStr();
+  if (state.lastDate === today) {
+    renderStreakBadge(state.count);
+    return;
+  }
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  const isConsecutive = state.lastDate === yesterday.toISOString().slice(0, 10);
+  const newState = { lastDate: today, count: isConsecutive ? state.count + 1 : 1 };
+  localStorage.setItem(STREAK_KEY, JSON.stringify(newState));
+  renderStreakBadge(newState.count);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  renderStreakBadge(getStreakState().count);
+});
+
+// SUCCESS BURST ANIMATION
+function spawnSuccessBurst(targetEl) {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const rect = targetEl.getBoundingClientRect();
+  const originX = rect.left + rect.width / 2;
+  const originY = rect.top + 16;
+  const colors = ["#8b93ff", "#5ee6ff", "#4f46e5", "#0ea5e9"];
+  const total = 14;
+
+  for (let i = 0; i < total; i++) {
+    const particle = document.createElement("div");
+    particle.className = "success-particle";
+    const angle = (Math.PI * 2 * i) / total + Math.random() * 0.4;
+    const distance = 60 + Math.random() * 50;
+    particle.style.left = `${originX}px`;
+    particle.style.top = `${originY}px`;
+    particle.style.background = colors[i % colors.length];
+    particle.style.setProperty("--dx", `${Math.cos(angle) * distance}px`);
+    particle.style.setProperty("--dy", `${Math.sin(angle) * distance}px`);
+    document.body.appendChild(particle);
+    particle.addEventListener("animationend", () => particle.remove());
+  }
+}
+
 document.querySelectorAll(".prompt-box, .answer-box").forEach((textarea) => {
   const section = textarea.closest(".panel-section");
   if (textarea.classList.contains("answer-box")) {
@@ -180,6 +418,8 @@ document.querySelectorAll(".prompt-box, .answer-box").forEach((textarea) => {
   });
   toolbar.appendChild(expandButton);
 
+  let historyPanel = null;
+
   if (textarea.classList.contains("prompt-box")) {
     const clearButton = document.createElement("button");
     clearButton.type = "button";
@@ -193,19 +433,89 @@ document.querySelectorAll(".prompt-box, .answer-box").forEach((textarea) => {
     });
     toolbar.appendChild(clearButton);
   } else {
+    const tool = textarea.id.replace("-output", "");
+    const inputBox = textarea.closest(".tool-card")?.querySelector(".prompt-box");
+
+    // DOWNLOAD MENU (txt / markdown / pdf)
+    const downloadWrap = document.createElement("div");
+    downloadWrap.className = "download-menu";
+
     const downloadButton = document.createElement("button");
     downloadButton.type = "button";
     downloadButton.className = "editor-btn";
-    downloadButton.textContent = "Download";
-    downloadButton.addEventListener("click", () => {
-      const tool = textarea.id.replace("-output", "");
-      downloadText(`toolstrike-${tool}.txt`, textarea.value);
-      showToast("Download started");
+    downloadButton.textContent = "Download ▾";
+    downloadWrap.appendChild(downloadButton);
+
+    const downloadOptions = document.createElement("div");
+    downloadOptions.className = "download-options";
+    [
+      { label: "As .txt", ext: "txt" },
+      { label: "As Markdown", ext: "md" },
+      { label: "As PDF", ext: "pdf" },
+    ].forEach(({ label, ext }) => {
+      const opt = document.createElement("button");
+      opt.type = "button";
+      opt.textContent = label;
+      opt.addEventListener("click", () => {
+        if (!textarea.value) {
+          showToast("Nothing to export yet");
+          downloadOptions.classList.remove("open");
+          return;
+        }
+        const title = toolInfo[tool]?.title || tool;
+        if (ext === "txt") downloadText(`toolstrike-${tool}.txt`, textarea.value);
+        else if (ext === "md") downloadMarkdown(tool, title, textarea.value);
+        else downloadPdf(title, textarea.value);
+        downloadOptions.classList.remove("open");
+        showToast(`Exporting as ${ext.toUpperCase()}`);
+      });
+      downloadOptions.appendChild(opt);
     });
-    toolbar.appendChild(downloadButton);
+    downloadWrap.appendChild(downloadOptions);
+
+    downloadButton.addEventListener("click", (event) => {
+      event.stopPropagation();
+      document.querySelectorAll(".download-options.open, .history-panel.open").forEach((el) => {
+        if (el !== downloadOptions) el.classList.remove("open");
+      });
+      downloadOptions.classList.toggle("open");
+    });
+
+    toolbar.appendChild(downloadWrap);
+
+    // HISTORY
+    const historyButton = document.createElement("button");
+    historyButton.type = "button";
+    historyButton.className = "editor-btn";
+    historyButton.textContent = "History";
+    toolbar.appendChild(historyButton);
+
+    historyPanel = document.createElement("div");
+    historyPanel.className = "history-panel";
+
+    historyButton.addEventListener("click", (event) => {
+      event.stopPropagation();
+      const willOpen = !historyPanel.classList.contains("open");
+      document.querySelectorAll(".download-options.open, .history-panel.open").forEach((el) => {
+        if (el !== historyPanel) el.classList.remove("open");
+      });
+      if (willOpen) {
+        renderHistoryPanel(tool, historyPanel, inputBox, textarea);
+        historyPanel.classList.add("open");
+      } else {
+        historyPanel.classList.remove("open");
+      }
+    });
   }
 
   textarea.insertAdjacentElement("afterend", toolbar);
+  if (historyPanel) {
+    toolbar.insertAdjacentElement("afterend", historyPanel);
+  }
+});
+
+document.addEventListener("click", () => {
+  document.querySelectorAll(".download-options.open, .history-panel.open").forEach((el) => el.classList.remove("open"));
 });
 
 document.querySelectorAll(".prompt-box").forEach((textarea) => {
@@ -274,6 +584,22 @@ async function runTool(endpoint, input, options = {}) {
     output.value = data.result || data.error || "No response.";
     updateEditorCount(output);
     output.classList.add("output-complete");
+
+    if (data.result) {
+      saveHistoryEntry(endpoint, input, data.result);
+      spawnSuccessBurst(output);
+      recordUsageToday();
+
+      if (endpoint === "grammar") {
+        const diffView = document.getElementById("grammar-diff");
+        const diffToggle = document.getElementById("grammar-diff-toggle");
+        if (diffView && diffToggle) {
+          diffView.classList.remove("visible");
+          output.style.display = "";
+          diffToggle.textContent = "Show Diff";
+        }
+      }
+    }
   } catch (err) {
     output.value = "Error connecting to backend.";
     updateEditorCount(output);
@@ -332,3 +658,23 @@ document.getElementById("tone-run").addEventListener("click", () => {
   const mode = document.getElementById("tone-mode").value;
   runTool("tone", input, { mode });
 });
+
+// GRAMMAR DIFF TOGGLE
+const grammarDiffToggle = document.getElementById("grammar-diff-toggle");
+const grammarDiffView = document.getElementById("grammar-diff");
+if (grammarDiffToggle && grammarDiffView) {
+  grammarDiffToggle.addEventListener("click", () => {
+    const grammarInput = document.getElementById("grammar-input");
+    const grammarOutput = document.getElementById("grammar-output");
+    if (!grammarOutput.value) {
+      showToast("Fix some text first");
+      return;
+    }
+    const showing = grammarDiffView.classList.toggle("visible");
+    grammarOutput.style.display = showing ? "none" : "";
+    if (showing) {
+      renderDiff(grammarInput.value, grammarOutput.value, grammarDiffView);
+    }
+    grammarDiffToggle.textContent = showing ? "Show Text" : "Show Diff";
+  });
+}
