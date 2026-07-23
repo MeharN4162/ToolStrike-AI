@@ -4,7 +4,6 @@ const toolCards = document.querySelectorAll(".tool-card");
 const toolTitle = document.getElementById("tool-title");
 const toolDesc = document.getElementById("tool-desc");
 const mobileToolSelect = document.getElementById("mobile-tool-select");
-const appStatus = document.getElementById("app-status");
 const toast = document.getElementById("toast");
 const editorCounters = new WeakMap();
 
@@ -231,7 +230,7 @@ if (themeToggle) {
     const isDark = document.body.getAttribute("data-theme") === "dark";
     const label = document.querySelector(".theme-label");
     const icon = document.querySelector(".theme-icon");
-    if (label) label.textContent = isDark ? "Light" : "Dark";
+    if (label) label.textContent = isDark ? "Light mode" : "Dark mode";
     if (icon) icon.textContent = isDark ? "☀️" : "🌙";
   };
 
@@ -262,7 +261,6 @@ async function runTool(endpoint, input, options = {}) {
   loader.classList.add("active");
   output.value = "";
   if (runButton) runButton.disabled = true;
-  if (appStatus) appStatus.textContent = "Working";
 
   try {
     const response = await fetch(`https://toolstrike-ai-backend.onrender.com/${endpoint}`, {
@@ -280,7 +278,6 @@ async function runTool(endpoint, input, options = {}) {
   } finally {
     loader.classList.remove("active");
     if (runButton) runButton.disabled = false;
-    if (appStatus) appStatus.textContent = "Ready";
   }
 }
 
