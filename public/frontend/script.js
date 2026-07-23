@@ -1,5 +1,5 @@
 // TOOL SWITCHING
-const navItems = document.querySelectorAll(".nav-item");
+const navItems = document.querySelectorAll(".nav-item, .welcome-tool");
 const toolCards = document.querySelectorAll(".tool-card");
 const toolTitle = document.getElementById("tool-title");
 const toolDesc = document.getElementById("tool-desc");
@@ -32,6 +32,10 @@ const toolInfo = {
   tone: {
     title: "Tone Changer",
     desc: "Rewrite text in any tone you choose.",
+  },
+  welcome: {
+    title: "Welcome to ToolStrike AI",
+    desc: "Choose a tool below or from the sidebar to get started.",
   },
 };
 
