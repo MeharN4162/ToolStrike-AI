@@ -64,6 +64,10 @@ function showToast(message) {
   showToast.timer = window.setTimeout(() => toast.classList.remove("visible"), 1800);
 }
 
+function chooseMessage(messages) {
+  return messages[Math.floor(Math.random() * messages.length)];
+}
+
 // Sidebar click switching
 navItems.forEach((item) => {
   item.addEventListener("click", () => {
@@ -260,7 +264,13 @@ async function runTool(endpoint, input, options = {}) {
 
   loader.classList.add("active");
   output.value = "";
+  output.classList.remove("output-complete");
   if (runButton) runButton.disabled = true;
+
+  const thinkingTimer = window.setTimeout(() => {
+    showToast(chooseMessage(["Thinking it through...", "Shaping your result...", "Finding the clearest wording..."]));
+  }, 700);
+  showToast(chooseMessage(["Preparing your result...", "Reading the brief...", "Working on it..."]));
 
   try {
     const response = await fetch(`https://toolstrike-ai-backend.onrender.com/${endpoint}`, {
@@ -272,10 +282,14 @@ async function runTool(endpoint, input, options = {}) {
     const data = await response.json();
     output.value = data.result || data.error || "No response.";
     updateEditorCount(output);
+    output.classList.add("output-complete");
+    showToast(data.result ? chooseMessage(["Done. Nice and clean.", "Result ready.", "Success. Your output is ready."]) : "The tool returned a response.");
   } catch (err) {
     output.value = "Error connecting to backend.";
     updateEditorCount(output);
+    showToast("The connection had a hiccup. Try again.");
   } finally {
+    window.clearTimeout(thinkingTimer);
     loader.classList.remove("active");
     if (runButton) runButton.disabled = false;
   }
