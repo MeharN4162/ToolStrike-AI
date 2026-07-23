@@ -230,7 +230,7 @@ if (themeToggle) {
     const isDark = document.body.getAttribute("data-theme") === "dark";
     const label = document.querySelector(".theme-label");
     const icon = document.querySelector(".theme-icon");
-    if (label) label.textContent = isDark ? "Light mode" : "Dark mode";
+    if (label) label.textContent = isDark ? "Light" : "Dark";
     if (icon) icon.textContent = isDark ? "☀️" : "🌙";
   };
 
