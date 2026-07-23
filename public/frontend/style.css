@@ -795,27 +795,23 @@ body[data-theme="dark"] .badge-secondary {
 
   position: relative;
   overflow: hidden;
-
 }
 
-/* AURORA GLASS OVERLAY */
+/* STATIC AURORA GLASS SHEEN */
 .tool-card::before {
   content: "";
   position: absolute;
   inset: 0;
   background: linear-gradient(135deg,
-    rgba(79, 70, 229, 0.12),
-    rgba(14, 165, 233, 0.12),
+    rgba(79, 70, 229, 0.08),
+    rgba(14, 165, 233, 0.06),
     transparent);
-  mix-blend-mode: screen;
   pointer-events: none;
-  animation: overlayShift 12s ease-in-out infinite;
 }
 
-@keyframes overlayShift {
-  0% { opacity: 0.4; transform: translateX(0); }
-  50% { opacity: 0.7; transform: translateX(20px); }
-  100% { opacity: 0.4; transform: translateX(0); }
+.tool-card > * {
+  position: relative;
+  z-index: 1;
 }
 
 .tool-card.active {
