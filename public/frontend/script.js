@@ -5,8 +5,6 @@ const toolTitle = document.getElementById("tool-title");
 const toolDesc = document.getElementById("tool-desc");
 const mobileToolSelect = document.getElementById("mobile-tool-select");
 const toast = document.getElementById("toast");
-const ambientStage = document.querySelector(".ambient-stage");
-const ambientMessage = document.getElementById("ambient-message");
 const editorCounters = new WeakMap();
 
 const toolInfo = {
@@ -66,23 +64,6 @@ function showToast(message) {
   showToast.timer = window.setTimeout(() => toast.classList.remove("visible"), 1800);
 }
 
-function showAmbientMessage(message) {
-  if (!ambientMessage) return;
-  window.clearTimeout(showAmbientMessage.timer);
-  ambientMessage.classList.remove("ambient-message-visible");
-  window.requestAnimationFrame(() => {
-    ambientMessage.textContent = message;
-    ambientMessage.classList.add("ambient-message-visible");
-  });
-  showAmbientMessage.timer = window.setTimeout(() => {
-    ambientMessage.classList.remove("ambient-message-visible");
-  }, 7200);
-}
-
-function chooseMessage(messages) {
-  return messages[Math.floor(Math.random() * messages.length)];
-}
-
 // Sidebar click switching
 navItems.forEach((item) => {
   item.addEventListener("click", () => {
@@ -128,25 +109,6 @@ function createRandomSpaceStars(count = 80) {
 
 document.addEventListener("DOMContentLoaded", () => {
   createRandomSpaceStars(80);
-
-  if (ambientStage) {
-    const spawnAmbientNode = () => {
-      const node = document.createElement("span");
-      node.className = "ambient-node ambient-node-random";
-      node.style.left = `${8 + Math.random() * 84}%`;
-      node.style.top = `${18 + Math.random() * 58}%`;
-      const size = 4 + Math.random() * 5;
-      node.style.width = `${size}px`;
-      node.style.height = `${size}px`;
-      node.style.animationDuration = `${8 + Math.random() * 4}s`;
-      node.style.animationDelay = `${Math.random() * 0.4}s`;
-      ambientStage.appendChild(node);
-      window.setTimeout(() => node.remove(), 13000);
-      window.setTimeout(spawnAmbientNode, 2500 + Math.random() * 3000);
-    };
-
-    window.setTimeout(spawnAmbientNode, 1600 + Math.random() * 2600);
-  }
 });
 
 // DISPLAY RESULT
@@ -301,11 +263,6 @@ async function runTool(endpoint, input, options = {}) {
   output.classList.remove("output-complete");
   if (runButton) runButton.disabled = true;
 
-  const thinkingTimer = window.setTimeout(() => {
-    showAmbientMessage(chooseMessage(["Thinking it through...", "Shaping your result...", "Finding the clearest wording..."]));
-  }, 700);
-  showAmbientMessage(chooseMessage(["Preparing your result...", "Reading the brief...", "Working on it..."]));
-
   try {
     const response = await fetch(`https://toolstrike-ai-backend.onrender.com/${endpoint}`, {
       method: "POST",
@@ -317,13 +274,10 @@ async function runTool(endpoint, input, options = {}) {
     output.value = data.result || data.error || "No response.";
     updateEditorCount(output);
     output.classList.add("output-complete");
-    showAmbientMessage(data.result ? chooseMessage(["Done. Nice and clean.", "Result ready.", "Success. Your output is ready."]) : "The tool returned a response.");
   } catch (err) {
     output.value = "Error connecting to backend.";
     updateEditorCount(output);
-    showAmbientMessage("The connection had a hiccup. Try again.");
   } finally {
-    window.clearTimeout(thinkingTimer);
     loader.classList.remove("active");
     if (runButton) runButton.disabled = false;
   }
