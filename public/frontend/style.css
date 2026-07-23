@@ -401,23 +401,11 @@ body[data-theme="dark"] .theme-thumb {
   animation: ambientScan 8s ease-in-out infinite;
 }
 
-.ambient-scanline,
 .ambient-node,
 .ambient-wave {
   position: absolute;
   display: block;
   pointer-events: none;
-}
-
-.ambient-scanline {
-  top: 0;
-  bottom: 0;
-  left: 20%;
-  width: 1px;
-  background: var(--accent-cyan);
-  opacity: 0.35;
-  box-shadow: 0 0 14px var(--accent-cyan);
-  animation: scanlineDrift 10s ease-in-out infinite;
 }
 
 .ambient-node {
@@ -431,15 +419,17 @@ body[data-theme="dark"] .theme-thumb {
 
 .ambient-message {
   position: absolute;
-  left: 24px;
+  right: 24px;
   top: 22px;
   z-index: 2;
+  max-width: 58%;
   color: var(--text-muted);
   font-family: var(--font-display);
   font-size: 0.76rem;
   letter-spacing: 0.06em;
   opacity: 0.5;
   transform: translateY(4px);
+  text-align: right;
   transition: opacity var(--transition-med), transform var(--transition-med), color var(--transition-med);
 }
 
@@ -476,16 +466,11 @@ body[data-theme="dark"] .theme-thumb {
   85% { transform: translateX(480%); opacity: 0; }
 }
 
-@keyframes scanlineDrift {
-  0%, 100% { transform: translateX(0); opacity: 0.2; }
-  50% { transform: translateX(520%); opacity: 0.65; }
-}
-
 @keyframes randomNodeAppear {
-  0% { opacity: 0; transform: scale(0.3); }
-  18% { opacity: 1; transform: scale(1.35); }
-  72% { opacity: 0.72; transform: scale(1); }
-  100% { opacity: 0; transform: scale(0.55); }
+  0% { opacity: 0; transform: scale(0.4); }
+  18% { opacity: 0.95; transform: scale(1.25); }
+  68% { opacity: 0.85; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.65); }
 }
 
 @keyframes waveBreathe {

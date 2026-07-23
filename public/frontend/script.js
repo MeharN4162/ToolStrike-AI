@@ -68,11 +68,15 @@ function showToast(message) {
 
 function showAmbientMessage(message) {
   if (!ambientMessage) return;
+  window.clearTimeout(showAmbientMessage.timer);
   ambientMessage.classList.remove("ambient-message-visible");
   window.requestAnimationFrame(() => {
     ambientMessage.textContent = message;
     ambientMessage.classList.add("ambient-message-visible");
   });
+  showAmbientMessage.timer = window.setTimeout(() => {
+    ambientMessage.classList.remove("ambient-message-visible");
+  }, 7200);
 }
 
 function chooseMessage(messages) {
@@ -134,14 +138,14 @@ document.addEventListener("DOMContentLoaded", () => {
       const size = 4 + Math.random() * 5;
       node.style.width = `${size}px`;
       node.style.height = `${size}px`;
-      node.style.animationDuration = `${3.2 + Math.random() * 2.4}s`;
+      node.style.animationDuration = `${8 + Math.random() * 4}s`;
       node.style.animationDelay = `${Math.random() * 0.4}s`;
       ambientStage.appendChild(node);
-      window.setTimeout(() => node.remove(), 6000);
-      window.setTimeout(spawnAmbientNode, 900 + Math.random() * 2600);
+      window.setTimeout(() => node.remove(), 13000);
+      window.setTimeout(spawnAmbientNode, 2500 + Math.random() * 3000);
     };
 
-    window.setTimeout(spawnAmbientNode, 700 + Math.random() * 1800);
+    window.setTimeout(spawnAmbientNode, 1600 + Math.random() * 2600);
   }
 });
 
