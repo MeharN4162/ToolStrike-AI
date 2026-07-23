@@ -467,13 +467,8 @@ body[data-theme="dark"] .sidebar-header {
   width: 32px;
   height: 32px;
   border-radius: 999px;
-  background: radial-gradient(circle at top left, #4f46e5, #0ea5e9);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 0.9rem;
-  color: #f9fafb;
+  display: block;
+  object-fit: cover;
   box-shadow: 0 0 18px rgba(79, 70, 229, 0.65);
 }
 
