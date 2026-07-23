@@ -6,6 +6,7 @@ const toolDesc = document.getElementById("tool-desc");
 const mobileToolSelect = document.getElementById("mobile-tool-select");
 const appStatus = document.getElementById("app-status");
 const toast = document.getElementById("toast");
+const editorCounters = new WeakMap();
 
 const toolInfo = {
   summarizer: {
@@ -138,7 +139,7 @@ function formatCount(value) {
 }
 
 function updateEditorCount(textarea) {
-  const counter = textarea.parentElement.nextElementSibling?.querySelector(".editor-count");
+  const counter = editorCounters.get(textarea);
   if (counter) counter.textContent = formatCount(textarea.value);
 }
 
@@ -162,6 +163,7 @@ document.querySelectorAll(".prompt-box, .answer-box").forEach((textarea) => {
 
   const counter = document.createElement("span");
   counter.className = "editor-count";
+  editorCounters.set(textarea, counter);
   const updateCount = () => {
     counter.textContent = formatCount(textarea.value);
   };
@@ -207,23 +209,45 @@ document.querySelectorAll(".prompt-box, .answer-box").forEach((textarea) => {
   textarea.insertAdjacentElement("afterend", toolbar);
 });
 
+document.querySelectorAll(".prompt-box").forEach((textarea) => {
+  textarea.addEventListener("keydown", (event) => {
+    if ((event.metaKey || event.ctrlKey) && event.key === "Enter") {
+      event.preventDefault();
+      const runButton = textarea.closest(".tool-card")?.querySelector(".primary-btn");
+      if (runButton && !runButton.disabled) runButton.click();
+    }
+  });
+});
+
 // THEME TOGGLE
 const themeToggle = document.getElementById("themeToggle");
 if (themeToggle) {
-  themeToggle.addEventListener("click", () => {
-    const body = document.body;
+  const savedTheme = localStorage.getItem("toolstrike-theme");
+  if (savedTheme === "light" || savedTheme === "dark") {
+    document.body.setAttribute("data-theme", savedTheme);
+  }
+
+  const updateThemeLabel = () => {
+    const isDark = document.body.getAttribute("data-theme") === "dark";
     const label = document.querySelector(".theme-label");
     const icon = document.querySelector(".theme-icon");
+    if (label) label.textContent = isDark ? "Light" : "Dark";
+    if (icon) icon.textContent = isDark ? "☀️" : "🌙";
+  };
+
+  updateThemeLabel();
+  themeToggle.addEventListener("click", () => {
+    const body = document.body;
 
     if (body.getAttribute("data-theme") === "dark") {
       body.setAttribute("data-theme", "light");
-      if (label) label.textContent = "Light";
-      if (icon) icon.textContent = "☀️";
+      localStorage.setItem("toolstrike-theme", "light");
     } else {
       body.setAttribute("data-theme", "dark");
-      if (label) label.textContent = "Dark";
-      if (icon) icon.textContent = "🌙";
+      localStorage.setItem("toolstrike-theme", "dark");
     }
+    updateThemeLabel();
+    showToast(`${body.getAttribute("data-theme") === "dark" ? "Dark" : "Light"} theme enabled`);
   });
 }
 

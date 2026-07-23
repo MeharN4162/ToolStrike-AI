@@ -506,7 +506,6 @@ body[data-theme="dark"] .nav-item.active {
   flex-direction: column;
   gap: 10px;
   padding-top: 8px;
-  border-top: 1px solid var(--border-soft);
 }
 
 .sidebar-note {
