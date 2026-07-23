@@ -4,6 +4,8 @@ const toolCards = document.querySelectorAll(".tool-card");
 const toolTitle = document.getElementById("tool-title");
 const toolDesc = document.getElementById("tool-desc");
 const mobileToolSelect = document.getElementById("mobile-tool-select");
+const appStatus = document.getElementById("app-status");
+const toast = document.getElementById("toast");
 
 const toolInfo = {
   summarizer: {
@@ -52,6 +54,14 @@ function openTool(tool) {
   toolTitle.textContent = toolInfo[tool].title;
   toolDesc.textContent = toolInfo[tool].desc;
   if (mobileToolSelect) mobileToolSelect.value = tool;
+}
+
+function showToast(message) {
+  if (!toast) return;
+  toast.textContent = message;
+  toast.classList.add("visible");
+  window.clearTimeout(showToast.timer);
+  showToast.timer = window.setTimeout(() => toast.classList.remove("visible"), 1800);
 }
 
 // Sidebar click switching
@@ -114,7 +124,8 @@ document.querySelectorAll(".copy-btn").forEach((btn) => {
     const targetId = btn.getAttribute("data-target");
     const text = document.getElementById(targetId).value;
     navigator.clipboard.writeText(text);
-    btn.textContent = "Copied!";
+    btn.textContent = "Copied";
+    showToast("Output copied to clipboard");
     setTimeout(() => (btn.textContent = "Copy"), 1200);
   });
 });
@@ -143,6 +154,9 @@ function downloadText(filename, text) {
 
 document.querySelectorAll(".prompt-box, .answer-box").forEach((textarea) => {
   const section = textarea.closest(".panel-section");
+  if (textarea.classList.contains("answer-box")) {
+    textarea.placeholder = "Your AI result will appear here...";
+  }
   const toolbar = document.createElement("div");
   toolbar.className = "editor-toolbar";
 
@@ -174,6 +188,7 @@ document.querySelectorAll(".prompt-box, .answer-box").forEach((textarea) => {
       textarea.value = "";
       textarea.dispatchEvent(new Event("input"));
       textarea.focus();
+      showToast("Editor cleared");
     });
     toolbar.appendChild(clearButton);
   } else {
@@ -184,6 +199,7 @@ document.querySelectorAll(".prompt-box, .answer-box").forEach((textarea) => {
     downloadButton.addEventListener("click", () => {
       const tool = textarea.id.replace("-output", "");
       downloadText(`toolstrike-${tool}.txt`, textarea.value);
+      showToast("Download started");
     });
     toolbar.appendChild(downloadButton);
   }
@@ -222,6 +238,7 @@ async function runTool(endpoint, input, options = {}) {
   loader.classList.add("active");
   output.value = "";
   if (runButton) runButton.disabled = true;
+  if (appStatus) appStatus.textContent = "Working";
 
   try {
     const response = await fetch(`https://toolstrike-ai-backend.onrender.com/${endpoint}`, {
@@ -239,6 +256,7 @@ async function runTool(endpoint, input, options = {}) {
   } finally {
     loader.classList.remove("active");
     if (runButton) runButton.disabled = false;
+    if (appStatus) appStatus.textContent = "Ready";
   }
 }
 

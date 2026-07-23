@@ -506,6 +506,7 @@ body[data-theme="dark"] .nav-item.active {
   flex-direction: column;
   gap: 10px;
   padding-top: 8px;
+  border-top: 1px solid var(--border-soft);
 }
 
 .sidebar-note {
@@ -592,6 +593,33 @@ body[data-theme="dark"] .badge-secondary {
   background: rgba(15, 23, 42, 0.9);
 }
 
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 9px;
+  border: 1px solid rgba(94, 230, 255, 0.28);
+  border-radius: 999px;
+  background: rgba(14, 165, 233, 0.09);
+  color: var(--accent-cyan);
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #63f5b2;
+  box-shadow: 0 0 10px rgba(99, 245, 178, 0.9);
+  animation: statusPulse 2.2s ease-in-out infinite;
+}
+
+@keyframes statusPulse {
+  0%, 100% { opacity: 0.55; transform: scale(0.85); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+
 /* =========================================
    TOOLSTRIKE AURORA GLASS V7 — PART 2/3
    TOOL CARDS, PANELS, TEXTAREAS, LOADERS
@@ -655,6 +683,12 @@ body[data-theme="dark"] .badge-secondary {
 
 .tool-card.active {
   display: block;
+  animation: toolReveal 0.36s ease-out both;
+}
+
+@keyframes toolReveal {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .tool-card:hover {
@@ -1194,6 +1228,30 @@ body:hover {
   color: white;
   text-align: center;
   margin-top: 20px;
+}
+
+.toast {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 10000;
+  max-width: min(320px, calc(100vw - 32px));
+  padding: 11px 15px;
+  border: 1px solid rgba(94, 230, 255, 0.35);
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.94);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+  color: #e5e7eb;
+  font-size: 0.8rem;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+}
+
+.toast.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .loading,

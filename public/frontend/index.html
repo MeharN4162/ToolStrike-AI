@@ -149,6 +149,7 @@
           <div class="dna-strand"></div>
           <div class="badge">Groq‑Powered</div>
           <div class="badge badge-secondary">Local Dev</div>
+          <div class="status-pill"><span class="status-dot"></span><span id="app-status">Ready</span></div>
         </div>
       </header>
 
@@ -432,6 +433,8 @@
     <p id="errorMessage"></p>
     <button id="retryBtn">Retry</button>
   </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
   <!-- JS is in the same folder as this file -->
   <script src="/frontend/script.js" defer></script>
