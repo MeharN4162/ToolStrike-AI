@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
-const MODEL = "llama3-70b-8192";
+const MODEL = "llama-3.3-70b-versatile";
 
 // UNIVERSAL AI CALLER
 async function callGroq(messages) {
@@ -30,8 +30,12 @@ async function callGroq(messages) {
   const data = await response.json();
   console.log("Groq response:", JSON.stringify(data, null, 2));
 
+  if (!response.ok) {
+    return { error: data.error?.message || `Groq request failed (${response.status}).` };
+  }
+
   if (!data.choices?.[0]?.message?.content) {
-    return { error: "AI returned no content.", details: data };
+    return { error: "AI returned no content." };
   }
 
   return { content: data.choices[0].message.content.trim() };
