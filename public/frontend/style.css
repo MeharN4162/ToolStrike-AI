@@ -666,90 +666,6 @@ body[data-theme="dark"] .badge-secondary {
               0 22px 60px rgba(14, 165, 233, 0.25);
 }
 
-/* WELCOME PANEL */
-.welcome-copy {
-  max-width: 650px;
-  margin-bottom: 24px;
-}
-
-.eyebrow {
-  color: var(--accent-cyan);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
-.welcome-copy h2 {
-  margin: 8px 0 8px;
-  font-family: var(--font-display);
-  font-size: clamp(2rem, 4vw, 3.6rem);
-  line-height: 1;
-  letter-spacing: 0.01em;
-}
-
-.welcome-copy p {
-  max-width: 540px;
-  margin: 0;
-  color: var(--text-muted);
-  line-height: 1.6;
-}
-
-.welcome-tools {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-}
-
-.welcome-tool {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-height: 70px;
-  padding: 12px;
-  border: 1px solid var(--border-soft);
-  border-radius: var(--radius-md);
-  background: rgba(15, 23, 42, 0.48);
-  color: var(--text-main);
-  text-align: left;
-  cursor: pointer;
-  transition: transform var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
-}
-
-.welcome-tool:hover {
-  transform: translateY(-3px);
-  border-color: var(--accent-cyan);
-  background: rgba(14, 165, 233, 0.12);
-}
-
-.welcome-tool-icon {
-  display: grid;
-  flex: 0 0 34px;
-  place-items: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-cyan));
-  color: #fff;
-  font-family: var(--font-display);
-  font-weight: 700;
-}
-
-.welcome-tool strong,
-.welcome-tool small {
-  display: block;
-}
-
-.welcome-tool strong {
-  font-size: 0.9rem;
-}
-
-.welcome-tool small {
-  margin-top: 3px;
-  color: var(--text-muted);
-  font-size: 0.75rem;
-}
-
 /* PANEL GRID */
 .panel-grid {
   display: grid;
@@ -1375,10 +1291,6 @@ footer a:hover {
 }
 
 @media (max-width: 720px) {
-  .welcome-tools {
-    grid-template-columns: 1fr;
-  }
-
   .site-footer,
   .legal-header {
     align-items: flex-start;
