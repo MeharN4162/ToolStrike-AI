@@ -114,26 +114,31 @@ document.querySelectorAll(".copy-btn").forEach((btn) => {
 });
 
 // THEME TOGGLE
-document.getElementById("themeToggle").addEventListener("click", () => {
-  const body = document.body;
-  const label = document.querySelector(".theme-label");
-  const icon = document.querySelector(".theme-icon");
+const themeToggle = document.getElementById("themeToggle");
+if (themeToggle) {
+  themeToggle.addEventListener("click", () => {
+    const body = document.body;
+    const label = document.querySelector(".theme-label");
+    const icon = document.querySelector(".theme-icon");
 
-  if (body.getAttribute("data-theme") === "dark") {
-    body.setAttribute("data-theme", "light");
-    label.textContent = "Light";
-    icon.textContent = "☀️";
-  } else {
-    body.setAttribute("data-theme", "dark");
-    label.textContent = "Dark";
-    icon.textContent = "🌙";
-  }
-});
+    if (body.getAttribute("data-theme") === "dark") {
+      body.setAttribute("data-theme", "light");
+      if (label) label.textContent = "Light";
+      if (icon) icon.textContent = "☀️";
+    } else {
+      body.setAttribute("data-theme", "dark");
+      if (label) label.textContent = "Dark";
+      if (icon) icon.textContent = "🌙";
+    }
+  });
+}
 
 // API CALL FUNCTION
 async function runTool(endpoint, input, options = {}) {
   const loader = document.getElementById(`${endpoint}-loader`);
   const output = document.getElementById(`${endpoint}-output`);
+
+  if (!loader || !output) return;
 
   loader.classList.add("active");
   output.value = "";
@@ -149,9 +154,9 @@ async function runTool(endpoint, input, options = {}) {
     output.value = data.result || data.error || "No response.";
   } catch (err) {
     output.value = "Error connecting to backend.";
+  } finally {
+    loader.classList.remove("active");
   }
-
-  loader.classList.remove("active");
 }
 
 // SUMMARIZER
