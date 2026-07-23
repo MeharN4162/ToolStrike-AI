@@ -425,11 +425,14 @@
 
       </section>
 
-      <div class="ambient-stage" aria-hidden="true">
+      <div class="ambient-stage" id="ambientStage" aria-hidden="true">
         <div class="ambient-content">
-          <span class="ambient-icon">✦</span>
+          <div class="ambient-loader" id="ambientLoader">
+            <span class="loader-dot"></span>
+            <span class="loader-dot"></span>
+            <span class="loader-dot"></span>
+          </div>
           <span id="ambientText" class="ambient-text"></span>
-          <span class="ambient-cursor"></span>
         </div>
       </div>
     </main>

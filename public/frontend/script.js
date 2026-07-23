@@ -318,21 +318,32 @@ function renderDiff(oldText, newText, container) {
   });
 }
 
-// AMBIENT STAGE — rotating tips + live status text
-const AMBIENT_TIPS = [
-  "Press Cmd/Ctrl + Enter while typing to run the active tool instantly.",
-  "Your last 15 results per tool are saved locally — open History any time.",
-  "Export any result as .txt, Markdown, or PDF from the Download menu.",
-  "Try Show Difference on the Grammar Fixer to see exactly what changed.",
-  "Toggle light or dark mode anytime from the switch in the header.",
-  "Study Helper can explain the same topic at 3 different difficulty levels.",
-  "Length Control can expand a short note into a full paragraph, or trim it down.",
-];
+// AMBIENT STAGE — drifting glow orbs + "generating" status while a tool runs
+function spawnAmbientOrbs(count = 5) {
+  const stage = document.getElementById("ambientStage");
+  if (!stage) return;
+  const colors = [
+    "rgba(139, 147, 255, 0.55)",
+    "rgba(94, 230, 255, 0.55)",
+    "rgba(79, 70, 229, 0.5)",
+    "rgba(14, 165, 233, 0.5)",
+  ];
 
-let ambientTipIndex = 0;
-let ambientBusy = false;
+  for (let i = 0; i < count; i++) {
+    const orb = document.createElement("div");
+    orb.className = "ambient-orb";
+    const size = 50 + Math.random() * 90;
+    orb.style.top = `${5 + Math.random() * 75}%`;
+    orb.style.width = `${size}px`;
+    orb.style.height = `${size}px`;
+    orb.style.background = colors[i % colors.length];
+    orb.style.animationDuration = `${9 + Math.random() * 10}s`;
+    orb.style.animationDelay = `${Math.random() * 8}s`;
+    stage.appendChild(orb);
+  }
+}
+
 let ambientTypeTimer = null;
-let ambientRotateTimer = null;
 
 function typeAmbientText(text) {
   const el = document.getElementById("ambientText");
@@ -347,29 +358,21 @@ function typeAmbientText(text) {
   }, 22);
 }
 
-function showNextAmbientTip() {
-  if (ambientBusy) return;
-  typeAmbientText(AMBIENT_TIPS[ambientTipIndex % AMBIENT_TIPS.length]);
-  ambientTipIndex++;
-}
-
-function startAmbientRotation() {
-  if (!document.getElementById("ambientText")) return;
-  showNextAmbientTip();
-  ambientRotateTimer = setInterval(showNextAmbientTip, 6000);
-}
-
 function setAmbientBusy(message) {
-  ambientBusy = true;
+  const ambientLoader = document.getElementById("ambientLoader");
+  if (ambientLoader) ambientLoader.classList.add("active");
   typeAmbientText(message);
 }
 
 function clearAmbientBusy() {
-  ambientBusy = false;
-  showNextAmbientTip();
+  clearInterval(ambientTypeTimer);
+  const ambientLoader = document.getElementById("ambientLoader");
+  if (ambientLoader) ambientLoader.classList.remove("active");
+  const el = document.getElementById("ambientText");
+  if (el) el.textContent = "";
 }
 
-document.addEventListener("DOMContentLoaded", startAmbientRotation);
+document.addEventListener("DOMContentLoaded", () => spawnAmbientOrbs(5));
 
 document.querySelectorAll(".prompt-box, .answer-box").forEach((textarea) => {
   const section = textarea.closest(".panel-section");
@@ -568,6 +571,12 @@ if (themeToggle) {
 }
 
 // API CALL FUNCTION
+const AMBIENT_MIN_VISIBLE_MS = 1600;
+
+function wait(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 async function runTool(endpoint, input, options = {}) {
   const loader = document.getElementById(`${endpoint}-loader`);
   const output = document.getElementById(`${endpoint}-output`);
@@ -581,6 +590,7 @@ async function runTool(endpoint, input, options = {}) {
   if (runButton) runButton.disabled = true;
 
   setAmbientBusy(`Generating your ${toolInfo[endpoint]?.title || endpoint} result…`);
+  const startedAt = Date.now();
 
   try {
     const response = await fetch(`https://toolstrike-ai-backend.onrender.com/${endpoint}`, {
@@ -590,6 +600,10 @@ async function runTool(endpoint, input, options = {}) {
     });
 
     const data = await response.json();
+
+    const elapsed = Date.now() - startedAt;
+    if (elapsed < AMBIENT_MIN_VISIBLE_MS) await wait(AMBIENT_MIN_VISIBLE_MS - elapsed);
+
     output.value = data.result || data.error || "No response.";
     updateEditorCount(output);
     output.classList.add("output-complete");
@@ -608,6 +622,8 @@ async function runTool(endpoint, input, options = {}) {
       }
     }
   } catch (err) {
+    const elapsed = Date.now() - startedAt;
+    if (elapsed < AMBIENT_MIN_VISIBLE_MS) await wait(AMBIENT_MIN_VISIBLE_MS - elapsed);
     output.value = "Error connecting to backend.";
     updateEditorCount(output);
   } finally {

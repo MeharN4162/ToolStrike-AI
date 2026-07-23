@@ -401,6 +401,26 @@ body[data-theme="dark"] .theme-thumb {
   animation: ambientScan 8s ease-in-out infinite;
 }
 
+/* DRIFTING GLOW ORBS (random, generated via JS) */
+.ambient-orb {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(18px);
+  opacity: 0;
+  pointer-events: none;
+  animation-name: ambientOrbDrift;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+@keyframes ambientOrbDrift {
+  0% { transform: translateX(-20%) scale(0.75); opacity: 0; }
+  15% { opacity: 0.9; }
+  50% { transform: translateX(60%) scale(1.2); opacity: 1; }
+  85% { opacity: 0.5; }
+  100% { transform: translateX(140%) scale(0.75); opacity: 0; }
+}
+
 .ambient-content {
   position: relative;
   z-index: 2;
@@ -412,18 +432,14 @@ body[data-theme="dark"] .theme-thumb {
   padding: 0 28px;
 }
 
-.ambient-icon {
-  color: var(--accent-cyan);
-  font-size: 1rem;
-  animation: ambientIconSpin 5s linear infinite;
-  text-shadow: 0 0 12px rgba(14, 165, 233, 0.65);
-  flex-shrink: 0;
+.ambient-loader {
+  display: none;
+  align-items: center;
+  gap: 4px;
 }
 
-@keyframes ambientIconSpin {
-  0% { transform: rotate(0deg) scale(1); }
-  50% { transform: rotate(180deg) scale(1.25); }
-  100% { transform: rotate(360deg) scale(1); }
+.ambient-loader.active {
+  display: inline-flex;
 }
 
 .ambient-text {
@@ -433,20 +449,6 @@ body[data-theme="dark"] .theme-thumb {
   letter-spacing: 0.01em;
   text-align: center;
   max-width: 620px;
-}
-
-.ambient-cursor {
-  width: 2px;
-  height: 16px;
-  background: var(--accent-cyan);
-  box-shadow: 0 0 8px rgba(14, 165, 233, 0.65);
-  animation: ambientBlink 1s steps(1) infinite;
-  flex-shrink: 0;
-}
-
-@keyframes ambientBlink {
-  0%, 49% { opacity: 1; }
-  50%, 100% { opacity: 0; }
 }
 
 @media (max-width: 720px) {
