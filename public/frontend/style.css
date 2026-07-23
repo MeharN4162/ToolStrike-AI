@@ -631,14 +631,6 @@ body[data-theme="dark"] .badge-secondary {
   position: relative;
   overflow: hidden;
 
-  /* Breathing animation */
-  animation: cardBreath 6s ease-in-out infinite;
-}
-
-@keyframes cardBreath {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-4px); }
-  100% { transform: translateY(0); }
 }
 
 /* AURORA GLASS OVERLAY */
@@ -666,7 +658,6 @@ body[data-theme="dark"] .badge-secondary {
 }
 
 .tool-card:hover {
-  transform: translateY(-8px);
   box-shadow: 0 32px 90px rgba(79, 70, 229, 0.25),
               0 22px 60px rgba(14, 165, 233, 0.25);
 }
@@ -722,6 +713,15 @@ textarea:focus {
   background: rgba(14, 165, 233, 0.08);
   transform: translateY(-2px);
   animation: pulseFocus 1.4s ease-in-out;
+}
+
+.answer-box {
+  scrollbar-width: none;
+  scrollbar-gutter: auto;
+}
+
+.answer-box::-webkit-scrollbar {
+  display: none;
 }
 
 @keyframes pulseFocus {

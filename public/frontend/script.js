@@ -126,6 +126,11 @@ function formatCount(value) {
   return `${words} words · ${characters} characters`;
 }
 
+function updateEditorCount(textarea) {
+  const counter = textarea.parentElement.nextElementSibling?.querySelector(".editor-count");
+  if (counter) counter.textContent = formatCount(textarea.value);
+}
+
 function downloadText(filename, text) {
   const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
   const url = URL.createObjectURL(blob);
@@ -227,8 +232,10 @@ async function runTool(endpoint, input, options = {}) {
 
     const data = await response.json();
     output.value = data.result || data.error || "No response.";
+    updateEditorCount(output);
   } catch (err) {
     output.value = "Error connecting to backend.";
+    updateEditorCount(output);
   } finally {
     loader.classList.remove("active");
     if (runButton) runButton.disabled = false;
