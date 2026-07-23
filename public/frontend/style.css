@@ -401,16 +401,6 @@ body[data-theme="dark"] .theme-thumb {
   animation: ambientScan 8s ease-in-out infinite;
 }
 
-.ambient-stage::after {
-  content: "";
-  position: absolute;
-  inset: 50% 6% auto;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--accent-soft), transparent);
-  box-shadow: 0 0 18px var(--accent-soft);
-  animation: ambientRail 5s ease-in-out infinite;
-}
-
 .ambient-scanline,
 .ambient-node,
 .ambient-wave {
@@ -435,13 +425,33 @@ body[data-theme="dark"] .theme-thumb {
   height: 5px;
   border: 1px solid var(--accent-cyan);
   border-radius: 50%;
-  background: var(--bg-card);
+  background: transparent;
   box-shadow: 0 0 14px var(--accent-cyan);
 }
 
-.node-one { left: 18%; top: 34%; animation: nodeBlink 3.6s ease-in-out infinite; }
-.node-two { left: 58%; top: 67%; animation: nodeBlink 4.8s 1.1s ease-in-out infinite; }
-.node-three { left: 82%; top: 27%; animation: nodeBlink 4.2s 2s ease-in-out infinite; }
+.ambient-message {
+  position: absolute;
+  left: 24px;
+  top: 22px;
+  z-index: 2;
+  color: var(--text-muted);
+  font-family: var(--font-display);
+  font-size: 0.76rem;
+  letter-spacing: 0.06em;
+  opacity: 0.5;
+  transform: translateY(4px);
+  transition: opacity var(--transition-med), transform var(--transition-med), color var(--transition-med);
+}
+
+.ambient-message-visible {
+  color: var(--accent-cyan);
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ambient-node-random {
+  animation: randomNodeAppear 4.2s ease-out forwards;
+}
 
 .ambient-wave {
   left: 12%;
@@ -466,19 +476,16 @@ body[data-theme="dark"] .theme-thumb {
   85% { transform: translateX(480%); opacity: 0; }
 }
 
-@keyframes ambientRail {
-  0%, 100% { opacity: 0.2; transform: scaleX(0.7); }
-  50% { opacity: 0.8; transform: scaleX(1); }
-}
-
 @keyframes scanlineDrift {
   0%, 100% { transform: translateX(0); opacity: 0.2; }
   50% { transform: translateX(520%); opacity: 0.65; }
 }
 
-@keyframes nodeBlink {
-  0%, 100% { opacity: 0.25; transform: scale(0.8); }
-  50% { opacity: 1; transform: scale(1.5); }
+@keyframes randomNodeAppear {
+  0% { opacity: 0; transform: scale(0.3); }
+  18% { opacity: 1; transform: scale(1.35); }
+  72% { opacity: 0.72; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.55); }
 }
 
 @keyframes waveBreathe {

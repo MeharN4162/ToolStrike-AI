@@ -5,6 +5,8 @@ const toolTitle = document.getElementById("tool-title");
 const toolDesc = document.getElementById("tool-desc");
 const mobileToolSelect = document.getElementById("mobile-tool-select");
 const toast = document.getElementById("toast");
+const ambientStage = document.querySelector(".ambient-stage");
+const ambientMessage = document.getElementById("ambient-message");
 const editorCounters = new WeakMap();
 
 const toolInfo = {
@@ -64,6 +66,15 @@ function showToast(message) {
   showToast.timer = window.setTimeout(() => toast.classList.remove("visible"), 1800);
 }
 
+function showAmbientMessage(message) {
+  if (!ambientMessage) return;
+  ambientMessage.classList.remove("ambient-message-visible");
+  window.requestAnimationFrame(() => {
+    ambientMessage.textContent = message;
+    ambientMessage.classList.add("ambient-message-visible");
+  });
+}
+
 function chooseMessage(messages) {
   return messages[Math.floor(Math.random() * messages.length)];
 }
@@ -113,6 +124,25 @@ function createRandomSpaceStars(count = 80) {
 
 document.addEventListener("DOMContentLoaded", () => {
   createRandomSpaceStars(80);
+
+  if (ambientStage) {
+    const spawnAmbientNode = () => {
+      const node = document.createElement("span");
+      node.className = "ambient-node ambient-node-random";
+      node.style.left = `${8 + Math.random() * 84}%`;
+      node.style.top = `${18 + Math.random() * 58}%`;
+      const size = 4 + Math.random() * 5;
+      node.style.width = `${size}px`;
+      node.style.height = `${size}px`;
+      node.style.animationDuration = `${3.2 + Math.random() * 2.4}s`;
+      node.style.animationDelay = `${Math.random() * 0.4}s`;
+      ambientStage.appendChild(node);
+      window.setTimeout(() => node.remove(), 6000);
+      window.setTimeout(spawnAmbientNode, 900 + Math.random() * 2600);
+    };
+
+    window.setTimeout(spawnAmbientNode, 700 + Math.random() * 1800);
+  }
 });
 
 // DISPLAY RESULT
@@ -268,9 +298,9 @@ async function runTool(endpoint, input, options = {}) {
   if (runButton) runButton.disabled = true;
 
   const thinkingTimer = window.setTimeout(() => {
-    showToast(chooseMessage(["Thinking it through...", "Shaping your result...", "Finding the clearest wording..."]));
+    showAmbientMessage(chooseMessage(["Thinking it through...", "Shaping your result...", "Finding the clearest wording..."]));
   }, 700);
-  showToast(chooseMessage(["Preparing your result...", "Reading the brief...", "Working on it..."]));
+  showAmbientMessage(chooseMessage(["Preparing your result...", "Reading the brief...", "Working on it..."]));
 
   try {
     const response = await fetch(`https://toolstrike-ai-backend.onrender.com/${endpoint}`, {
@@ -283,11 +313,11 @@ async function runTool(endpoint, input, options = {}) {
     output.value = data.result || data.error || "No response.";
     updateEditorCount(output);
     output.classList.add("output-complete");
-    showToast(data.result ? chooseMessage(["Done. Nice and clean.", "Result ready.", "Success. Your output is ready."]) : "The tool returned a response.");
+    showAmbientMessage(data.result ? chooseMessage(["Done. Nice and clean.", "Result ready.", "Success. Your output is ready."]) : "The tool returned a response.");
   } catch (err) {
     output.value = "Error connecting to backend.";
     updateEditorCount(output);
-    showToast("The connection had a hiccup. Try again.");
+    showAmbientMessage("The connection had a hiccup. Try again.");
   } finally {
     window.clearTimeout(thinkingTimer);
     loader.classList.remove("active");
