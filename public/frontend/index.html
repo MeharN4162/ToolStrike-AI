@@ -31,7 +31,7 @@
   <meta property="og:url" content="https://tool-strike-ai.vercel.app/">
   <meta property="og:type" content="website">
 
-  <!-- Stylesheet -->
+  <!-- STYLEHSEET -->
   <link rel="stylesheet" href="/frontend/style.css">
 
   <!-- Structured Data -->
@@ -252,15 +252,14 @@
               <label>Corrected Text</label>
               <div class="output-wrapper">
                 <textarea id="grammar-output" class="answer-box" readonly></textarea>
+                <div id="grammar-diff" class="diff-view"></div>
                 <div class="loader" id="grammar-loader">
                   <div class="loader-dot"></div>
                   <div class="loader-dot"></div>
                   <div class="loader-dot"></div>
                 </div>
               </div>
-              <div id="grammar-diff" class="diff-view"></div>
               <div class="output-actions">
-                <button class="editor-btn" id="grammar-diff-toggle" type="button">Show Diff</button>
                 <button class="copy-btn" data-target="grammar-output">Copy</button>
               </div>
             </div>
@@ -426,7 +425,13 @@
 
       </section>
 
-      <div class="ambient-stage" aria-hidden="true"></div>
+      <div class="ambient-stage" aria-hidden="true">
+        <div class="ambient-content">
+          <span class="ambient-icon">✦</span>
+          <span id="ambientText" class="ambient-text"></span>
+          <span class="ambient-cursor"></span>
+        </div>
+      </div>
     </main>
   </div> <!-- END OF .app-shell -->
 

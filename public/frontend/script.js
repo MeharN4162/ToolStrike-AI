@@ -318,83 +318,68 @@ function renderDiff(oldText, newText, container) {
   });
 }
 
-// DAILY STREAK TRACKER
-const STREAK_KEY = "toolstrike-streak";
+// AMBIENT STAGE — rotating tips + live status text
+const AMBIENT_TIPS = [
+  "Press Cmd/Ctrl + Enter while typing to run the active tool instantly.",
+  "Your last 15 results per tool are saved locally — open History any time.",
+  "Export any result as .txt, Markdown, or PDF from the Download menu.",
+  "Try Show Difference on the Grammar Fixer to see exactly what changed.",
+  "Toggle light or dark mode anytime from the switch in the header.",
+  "Study Helper can explain the same topic at 3 different difficulty levels.",
+  "Length Control can expand a short note into a full paragraph, or trim it down.",
+];
 
-function getStreakState() {
-  try {
-    return JSON.parse(localStorage.getItem(STREAK_KEY)) || { lastDate: null, count: 0 };
-  } catch {
-    return { lastDate: null, count: 0 };
-  }
+let ambientTipIndex = 0;
+let ambientBusy = false;
+let ambientTypeTimer = null;
+let ambientRotateTimer = null;
+
+function typeAmbientText(text) {
+  const el = document.getElementById("ambientText");
+  if (!el) return;
+  clearInterval(ambientTypeTimer);
+  el.textContent = "";
+  let i = 0;
+  ambientTypeTimer = setInterval(() => {
+    el.textContent += text[i];
+    i++;
+    if (i >= text.length) clearInterval(ambientTypeTimer);
+  }, 22);
 }
 
-function todayStr() {
-  return new Date().toISOString().slice(0, 10);
+function showNextAmbientTip() {
+  if (ambientBusy) return;
+  typeAmbientText(AMBIENT_TIPS[ambientTipIndex % AMBIENT_TIPS.length]);
+  ambientTipIndex++;
 }
 
-function renderStreakBadge(count) {
-  const headerRight = document.querySelector(".header-right");
-  if (!headerRight) return;
-  let badge = document.getElementById("streakBadge");
-  if (!badge) {
-    badge = document.createElement("div");
-    badge.id = "streakBadge";
-    badge.className = "badge badge-streak";
-    const themeToggle = headerRight.querySelector(".theme-toggle");
-    headerRight.insertBefore(badge, themeToggle || null);
-  }
-  badge.textContent = count > 0 ? `🔥 ${count} day${count === 1 ? "" : "s"} streak` : "🔥 Start your streak";
+function startAmbientRotation() {
+  if (!document.getElementById("ambientText")) return;
+  showNextAmbientTip();
+  ambientRotateTimer = setInterval(showNextAmbientTip, 6000);
 }
 
-function recordUsageToday() {
-  const state = getStreakState();
-  const today = todayStr();
-  if (state.lastDate === today) {
-    renderStreakBadge(state.count);
-    return;
-  }
-  const yesterday = new Date();
-  yesterday.setDate(yesterday.getDate() - 1);
-  const isConsecutive = state.lastDate === yesterday.toISOString().slice(0, 10);
-  const newState = { lastDate: today, count: isConsecutive ? state.count + 1 : 1 };
-  localStorage.setItem(STREAK_KEY, JSON.stringify(newState));
-  renderStreakBadge(newState.count);
+function setAmbientBusy(message) {
+  ambientBusy = true;
+  typeAmbientText(message);
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  renderStreakBadge(getStreakState().count);
-});
-
-// SUCCESS BURST ANIMATION
-function spawnSuccessBurst(targetEl) {
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  const rect = targetEl.getBoundingClientRect();
-  const originX = rect.left + rect.width / 2;
-  const originY = rect.top + 16;
-  const colors = ["#8b93ff", "#5ee6ff", "#4f46e5", "#0ea5e9"];
-  const total = 14;
-
-  for (let i = 0; i < total; i++) {
-    const particle = document.createElement("div");
-    particle.className = "success-particle";
-    const angle = (Math.PI * 2 * i) / total + Math.random() * 0.4;
-    const distance = 60 + Math.random() * 50;
-    particle.style.left = `${originX}px`;
-    particle.style.top = `${originY}px`;
-    particle.style.background = colors[i % colors.length];
-    particle.style.setProperty("--dx", `${Math.cos(angle) * distance}px`);
-    particle.style.setProperty("--dy", `${Math.sin(angle) * distance}px`);
-    document.body.appendChild(particle);
-    particle.addEventListener("animationend", () => particle.remove());
-  }
+function clearAmbientBusy() {
+  ambientBusy = false;
+  showNextAmbientTip();
 }
+
+document.addEventListener("DOMContentLoaded", startAmbientRotation);
 
 document.querySelectorAll(".prompt-box, .answer-box").forEach((textarea) => {
   const section = textarea.closest(".panel-section");
-  if (textarea.classList.contains("answer-box")) {
+  const isAnswer = textarea.classList.contains("answer-box");
+  if (isAnswer) {
     textarea.placeholder = "Your AI result will appear here...";
   }
+  const tool = isAnswer ? textarea.id.replace("-output", "") : null;
+  const wrapper = textarea.closest(".output-wrapper");
+
   const toolbar = document.createElement("div");
   toolbar.className = "editor-toolbar";
 
@@ -408,6 +393,28 @@ document.querySelectorAll(".prompt-box, .answer-box").forEach((textarea) => {
   updateCount();
   toolbar.appendChild(counter);
 
+  // SHOW DIFFERENCE (Grammar Fixer only) — sits left of Expand
+  if (tool === "grammar") {
+    const diffView = document.getElementById("grammar-diff");
+    const diffToggle = document.createElement("button");
+    diffToggle.type = "button";
+    diffToggle.className = "editor-btn";
+    diffToggle.id = "grammar-diff-toggle";
+    diffToggle.textContent = "Show Difference";
+    diffToggle.addEventListener("click", () => {
+      const grammarInput = document.getElementById("grammar-input");
+      if (!textarea.value) {
+        showToast("Fix some text first");
+        return;
+      }
+      const showing = diffView.classList.toggle("visible");
+      textarea.style.display = showing ? "none" : "";
+      if (showing) renderDiff(grammarInput.value, textarea.value, diffView);
+      diffToggle.textContent = showing ? "Hide Difference" : "Show Difference";
+    });
+    toolbar.appendChild(diffToggle);
+  }
+
   const expandButton = document.createElement("button");
   expandButton.type = "button";
   expandButton.className = "editor-btn";
@@ -420,7 +427,7 @@ document.querySelectorAll(".prompt-box, .answer-box").forEach((textarea) => {
 
   let historyPanel = null;
 
-  if (textarea.classList.contains("prompt-box")) {
+  if (!isAnswer) {
     const clearButton = document.createElement("button");
     clearButton.type = "button";
     clearButton.className = "editor-btn";
@@ -433,7 +440,6 @@ document.querySelectorAll(".prompt-box, .answer-box").forEach((textarea) => {
     });
     toolbar.appendChild(clearButton);
   } else {
-    const tool = textarea.id.replace("-output", "");
     const inputBox = textarea.closest(".tool-card")?.querySelector(".prompt-box");
 
     // DOWNLOAD MENU (txt / markdown / pdf)
@@ -508,7 +514,8 @@ document.querySelectorAll(".prompt-box, .answer-box").forEach((textarea) => {
     });
   }
 
-  textarea.insertAdjacentElement("afterend", toolbar);
+  const insertTarget = wrapper || textarea;
+  insertTarget.insertAdjacentElement("afterend", toolbar);
   if (historyPanel) {
     toolbar.insertAdjacentElement("afterend", historyPanel);
   }
@@ -573,6 +580,8 @@ async function runTool(endpoint, input, options = {}) {
   output.classList.remove("output-complete");
   if (runButton) runButton.disabled = true;
 
+  setAmbientBusy(`Generating your ${toolInfo[endpoint]?.title || endpoint} result…`);
+
   try {
     const response = await fetch(`https://toolstrike-ai-backend.onrender.com/${endpoint}`, {
       method: "POST",
@@ -587,8 +596,6 @@ async function runTool(endpoint, input, options = {}) {
 
     if (data.result) {
       saveHistoryEntry(endpoint, input, data.result);
-      spawnSuccessBurst(output);
-      recordUsageToday();
 
       if (endpoint === "grammar") {
         const diffView = document.getElementById("grammar-diff");
@@ -596,7 +603,7 @@ async function runTool(endpoint, input, options = {}) {
         if (diffView && diffToggle) {
           diffView.classList.remove("visible");
           output.style.display = "";
-          diffToggle.textContent = "Show Diff";
+          diffToggle.textContent = "Show Difference";
         }
       }
     }
@@ -606,6 +613,7 @@ async function runTool(endpoint, input, options = {}) {
   } finally {
     loader.classList.remove("active");
     if (runButton) runButton.disabled = false;
+    clearAmbientBusy();
   }
 }
 
@@ -659,22 +667,3 @@ document.getElementById("tone-run").addEventListener("click", () => {
   runTool("tone", input, { mode });
 });
 
-// GRAMMAR DIFF TOGGLE
-const grammarDiffToggle = document.getElementById("grammar-diff-toggle");
-const grammarDiffView = document.getElementById("grammar-diff");
-if (grammarDiffToggle && grammarDiffView) {
-  grammarDiffToggle.addEventListener("click", () => {
-    const grammarInput = document.getElementById("grammar-input");
-    const grammarOutput = document.getElementById("grammar-output");
-    if (!grammarOutput.value) {
-      showToast("Fix some text first");
-      return;
-    }
-    const showing = grammarDiffView.classList.toggle("visible");
-    grammarOutput.style.display = showing ? "none" : "";
-    if (showing) {
-      renderDiff(grammarInput.value, grammarOutput.value, grammarDiffView);
-    }
-    grammarDiffToggle.textContent = showing ? "Show Text" : "Show Diff";
-  });
-}
