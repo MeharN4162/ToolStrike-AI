@@ -208,7 +208,7 @@ app.post("/tone", async (req, res) => {
   }
 });
 
-// START SERVER (Render-compatible)
+// START SERVER! (Render-compatible)
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Backend running on port ${PORT} (GROQ MODE)`);
