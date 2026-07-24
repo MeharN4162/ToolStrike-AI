@@ -118,17 +118,8 @@ function displayResult(text) {
   outputBox.value = text;
 }
 
-// COPY BUTTONS
-document.querySelectorAll(".copy-btn").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    const targetId = btn.getAttribute("data-target");
-    const text = document.getElementById(targetId).value;
-    navigator.clipboard.writeText(text);
-    btn.textContent = "Copied";
-    showToast("Output copied to clipboard");
-    setTimeout(() => (btn.textContent = "Copy"), 1200);
-  });
-});
+const COPY_ICON = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';
+const CHECK_ICON = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
 
 // EDITOR CONTROLS
 function formatCount(value) {
@@ -490,6 +481,29 @@ document.querySelectorAll(".prompt-box, .answer-box").forEach((textarea) => {
         historyPanel.classList.remove("open");
       }
     });
+
+    // COPY (icon button)
+    const copyButton = document.createElement("button");
+    copyButton.type = "button";
+    copyButton.className = "editor-btn icon-btn";
+    copyButton.setAttribute("aria-label", "Copy to clipboard");
+    copyButton.title = "Copy";
+    copyButton.innerHTML = COPY_ICON;
+    copyButton.addEventListener("click", () => {
+      if (!textarea.value) {
+        showToast("Nothing to copy yet");
+        return;
+      }
+      navigator.clipboard.writeText(textarea.value);
+      showToast("Output copied to clipboard");
+      copyButton.innerHTML = CHECK_ICON;
+      copyButton.classList.add("copied");
+      setTimeout(() => {
+        copyButton.innerHTML = COPY_ICON;
+        copyButton.classList.remove("copied");
+      }, 1200);
+    });
+    toolbar.appendChild(copyButton);
   }
 
   const insertTarget = wrapper || textarea;
