@@ -128,8 +128,7 @@
       z-index: 5;
     }
 
-    .landing-steps h2,
-    .landing-faq h2 {
+    .landing-steps h2 {
       font-family: var(--font-display);
       font-size: 1.8rem;
       margin-bottom: 40px;
@@ -188,77 +187,43 @@
       line-height: 1.5;
     }
 
-    /* FAQ */
-    .landing-faq {
-      margin-top: 90px;
-      max-width: 760px;
-      width: 100%;
-      text-align: left;
-      z-index: 5;
-    }
-
-    .landing-faq h2 {
-      text-align: center;
-    }
-
-    .faq-item {
-      background: var(--bg-card);
-      border: 1px solid var(--border-soft);
-      border-radius: var(--radius-md);
-      margin-bottom: 14px;
-      backdrop-filter: blur(22px);
-      box-shadow: var(--shadow-soft);
-      overflow: hidden;
-    }
-
-    .faq-item summary {
-      cursor: pointer;
-      list-style: none;
-      padding: 16px 20px;
-      font-weight: 600;
-      font-size: 0.95rem;
-      color: var(--text-main);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      transition: color var(--transition-fast);
-    }
-
-    .faq-item summary::-webkit-details-marker {
-      display: none;
-    }
-
-    .faq-item summary::after {
-      content: "+";
-      font-size: 1.3rem;
-      font-family: var(--font-display);
-      color: var(--accent-cyan);
-      transition: transform var(--transition-fast);
-      flex-shrink: 0;
-    }
-
-    .faq-item[open] summary::after {
-      transform: rotate(45deg);
-    }
-
-    .faq-item[open] summary {
-      color: var(--accent-strong);
-    }
-
-    .faq-item p {
-      margin: 0;
-      padding: 0 20px 18px;
-      color: var(--text-muted);
-      font-size: 0.9rem;
-      line-height: 1.6;
-    }
-
     /* SITE FOOTER (landing) */
     .landing-wrapper .site-footer {
       margin-top: 90px;
       max-width: 960px;
       width: 100%;
+    }
+
+    /* SCROLL REVEAL */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* HERO ENTRANCE + SHIMMER */
+    .landing-hero {
+      animation: heroEnter 0.9s ease-out both;
+    }
+
+    @keyframes heroEnter {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .landing-hero h1 {
+      background-size: 200% auto;
+      animation: heroShimmer 6s ease-in-out infinite;
+    }
+
+    @keyframes heroShimmer {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
     }
   </style>
 </head>
@@ -291,7 +256,7 @@
       <a class="landing-cta" href="/frontend/index.html">Start Using ToolStrike</a>
     </div>
 
-    <div class="landing-features">
+    <div class="landing-features reveal">
       <div class="feature-box">
         <h3>Summarizer</h3>
         <p>Turn long text into clean, clear summaries.</p>
@@ -335,18 +300,18 @@
     </div>
 
     <!-- HOW IT WORKS -->
-    <div class="landing-steps">
+    <div class="landing-steps reveal">
       <h2>How it works</h2>
       <div class="steps-grid">
         <div class="step-box">
           <span class="step-number">1</span>
-          <h3>Paste your text</h3>
-          <p>Drop in whatever you're working on — an essay, an email draft, notes for class, anything.</p>
+          <h3>Pick a tool</h3>
+          <p>Choose from summarizing, paraphrasing, grammar fixing, and more from the sidebar.</p>
         </div>
         <div class="step-box">
           <span class="step-number">2</span>
-          <h3>Pick a tool</h3>
-          <p>Choose from summarizing, paraphrasing, grammar fixing, and more from the sidebar.</p>
+          <h3>Paste your text</h3>
+          <p>Drop in whatever you're working on — an essay, an email draft, notes for class, anything.</p>
         </div>
         <div class="step-box">
           <span class="step-number">3</span>
@@ -356,37 +321,7 @@
       </div>
     </div>
 
-    <!-- FAQ -->
-    <div class="landing-faq">
-      <h2>Frequently asked questions</h2>
-
-      <details class="faq-item">
-        <summary>Is ToolStrike free to use?</summary>
-        <p>Yes. All tools are free to use right now — just open the workspace and start writing.</p>
-      </details>
-
-      <details class="faq-item">
-        <summary>Is my text stored or shared?</summary>
-        <p>Your text is sent to the AI model only to generate a result and isn't stored on our servers afterward. Any history you see (like recent results) is saved locally in your own browser, not on our servers.</p>
-      </details>
-
-      <details class="faq-item">
-        <summary>Do I need an account?</summary>
-        <p>No sign-up required. Just go to the workspace and start using any tool immediately.</p>
-      </details>
-
-      <details class="faq-item">
-        <summary>What can I use ToolStrike for?</summary>
-        <p>Summarizing long text, paraphrasing, fixing grammar, writing emails, studying topics, adjusting text length, and changing tone — all in one place.</p>
-      </details>
-
-      <details class="faq-item">
-        <summary>Will more tools be added?</summary>
-        <p>Yes — ToolStrike is actively being improved, and more tools and features are on the way.</p>
-      </details>
-    </div>
-
-    <footer class="site-footer">
+    <footer class="site-footer reveal">
       <span>ToolStrike AI © 2026 — Built by Mehar</span>
       <nav>
         <a href="/frontend/privacy.html">Privacy Policy</a>
@@ -396,6 +331,20 @@
     </footer>
 
   </div>
+
+  <script>
+    document.querySelectorAll(".reveal").forEach((el) => {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15 });
+      observer.observe(el);
+    });
+  </script>
 
   <script src="/frontend/script.js" defer></script>
 </body>
