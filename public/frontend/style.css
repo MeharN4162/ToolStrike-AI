@@ -458,8 +458,8 @@ body[data-theme="dark"] .theme-thumb {
 
 @keyframes ambientScan {
   0% { transform: translateX(0); opacity: 0; }
-  8% { opacity: 0.55; }
-  38% { opacity: 0.55; }
+  8% { opacity: 0.8; }
+  38% { opacity: 0.8; }
   48%, 100% { transform: translateX(480%); opacity: 0; }
 }
 
@@ -1215,7 +1215,7 @@ select:hover {
   height: 6px;
   background: var(--accent-cyan);
   border-radius: 999px;
-  opacity: 0.65;
+  opacity: 0.55;
   box-shadow: 0 0 14px rgba(14, 165, 233, 0.55);
 
 }
