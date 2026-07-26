@@ -446,7 +446,8 @@ document.querySelectorAll(".prompt-box, .answer-box").forEach((textarea) => {
       });
       downloadOptions.appendChild(opt);
     });
-    downloadWrap.appendChild(downloadOptions);
+    // Portaled to <body> so it isn't clipped by the tool-card's overflow:hidden
+    document.body.appendChild(downloadOptions);
 
     downloadButton.addEventListener("click", (event) => {
       event.stopPropagation();
@@ -456,8 +457,10 @@ document.querySelectorAll(".prompt-box, .answer-box").forEach((textarea) => {
       const willOpen = !downloadOptions.classList.contains("open");
       downloadOptions.classList.toggle("open", willOpen);
       if (willOpen) {
-        const overflowsBottom = downloadOptions.getBoundingClientRect().bottom > window.innerHeight;
-        downloadOptions.classList.toggle("open-upward", overflowsBottom);
+        const btnRect = downloadButton.getBoundingClientRect();
+        const menuRect = downloadOptions.getBoundingClientRect();
+        downloadOptions.style.top = `${btnRect.bottom + 6}px`;
+        downloadOptions.style.left = `${btnRect.right - menuRect.width}px`;
       }
     });
 
@@ -520,6 +523,10 @@ document.querySelectorAll(".prompt-box, .answer-box").forEach((textarea) => {
 
 document.addEventListener("click", () => {
   document.querySelectorAll(".download-options.open, .history-panel.open").forEach((el) => el.classList.remove("open"));
+});
+
+document.querySelector(".main")?.addEventListener("scroll", () => {
+  document.querySelectorAll(".download-options.open").forEach((el) => el.classList.remove("open"));
 });
 
 document.querySelectorAll(".prompt-box").forEach((textarea) => {
