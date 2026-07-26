@@ -453,7 +453,12 @@ document.querySelectorAll(".prompt-box, .answer-box").forEach((textarea) => {
       document.querySelectorAll(".download-options.open, .history-panel.open").forEach((el) => {
         if (el !== downloadOptions) el.classList.remove("open");
       });
-      downloadOptions.classList.toggle("open");
+      const willOpen = !downloadOptions.classList.contains("open");
+      downloadOptions.classList.toggle("open", willOpen);
+      if (willOpen) {
+        const overflowsBottom = downloadOptions.getBoundingClientRect().bottom > window.innerHeight;
+        downloadOptions.classList.toggle("open-upward", overflowsBottom);
+      }
     });
 
     toolbar.appendChild(downloadWrap);
