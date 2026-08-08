@@ -1886,6 +1886,10 @@ footer a:hover {
   gap: 20px;
 }
 
+.legal-content .hub-grid {
+  margin-top: 28px;
+}
+
 .hub-card {
   background: var(--bg-card);
   padding: 20px;

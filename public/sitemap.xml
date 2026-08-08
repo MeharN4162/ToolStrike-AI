@@ -16,4 +16,24 @@
     <loc>https://tool-strike-ai.vercel.app/frontend/contact.html</loc>
     <priority>0.5</priority>
   </url>
+  <url>
+    <loc>https://tool-strike-ai.vercel.app/frontend/blog/index.html</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://tool-strike-ai.vercel.app/frontend/blog/summarize-long-documents.html</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://tool-strike-ai.vercel.app/frontend/blog/email-tone-mistakes.html</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://tool-strike-ai.vercel.app/frontend/blog/ai-vs-human-proofreading.html</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://tool-strike-ai.vercel.app/frontend/blog/study-smarter-with-ai.html</loc>
+    <priority>0.6</priority>
+  </url>
 </urlset>
