@@ -217,7 +217,10 @@ body::after {
   transition: background var(--transition-med),
               box-shadow var(--transition-med),
               transform var(--transition-med);
-  position: relative;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  align-self: start;
   z-index: 10;
 }
 
