@@ -843,8 +843,56 @@ body[data-theme="dark"] .badge-secondary {
   color: var(--text-main);
 }
 
-.intro-section > .intro-heading:first-of-type {
-  margin-top: 0;
+.intro-summary .intro-heading {
+  margin-top: 4px;
+}
+
+.intro-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.intro-summary::-webkit-details-marker {
+  display: none;
+}
+
+.intro-summary-text {
+  display: block;
+}
+
+.intro-toggle-icon {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  border: 1px solid var(--border-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-cyan);
+  transition: transform var(--transition-fast), background var(--transition-fast);
+}
+
+.intro-toggle-icon::before {
+  content: "\2193";
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.intro-section[open] .intro-toggle-icon {
+  transform: rotate(180deg);
+}
+
+.intro-summary:hover .intro-toggle-icon {
+  background: var(--accent-soft);
+}
+
+.intro-body {
+  margin-top: 6px;
 }
 
 .intro-lead {
