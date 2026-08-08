@@ -54,6 +54,14 @@ function openTool(tool) {
   toolTitle.textContent = toolInfo[tool].title;
   toolDesc.textContent = toolInfo[tool].desc;
   if (mobileToolSelect) mobileToolSelect.value = tool;
+
+  // Replay entrance animation on the ambient grid + about section
+  [document.getElementById("ambientStage"), document.getElementById("about")].forEach((el) => {
+    if (!el) return;
+    el.classList.remove("reveal-pulse");
+    void el.offsetWidth;
+    el.classList.add("reveal-pulse");
+  });
 }
 
 function showToast(message) {
@@ -81,6 +89,8 @@ window.addEventListener("DOMContentLoaded", () => {
   const hash = window.location.hash.replace("#", "");
   if (hash && toolInfo[hash]) {
     openTool(hash);
+  } else {
+    openTool("summarizer");
   }
 });
 

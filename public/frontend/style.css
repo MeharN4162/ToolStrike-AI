@@ -792,6 +792,11 @@ body[data-theme="dark"] .badge-secondary {
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* Replayed on the ambient grid + about section every time a tool is opened */
+.reveal-pulse {
+  animation: toolReveal 0.36s ease-out both;
+}
+
 .tool-card:hover {
   box-shadow: 0 32px 90px rgba(79, 70, 229, 0.25),
               0 22px 60px rgba(14, 165, 233, 0.25);
