@@ -91,7 +91,7 @@
       <nav class="sidebar-nav">
         <div class="nav-label">Tools</div>
 
-        <div class="nav-item" data-target="summarizer">
+        <div class="nav-item active" data-target="summarizer">
           <span class="nav-dot"></span>
           <span>Summarizer</span>
         </div>
@@ -156,6 +156,87 @@
         </div>
       </header>
 
+      <section class="intro-section" id="about">
+        <span class="intro-eyebrow">About ToolStrike AI</span>
+        <h2 class="intro-heading">One workspace for every writing task</h2>
+        <p class="intro-lead">ToolStrike AI is a free, browser-based writing workspace that brings together seven focused AI tools — summarizing, paraphrasing, grammar correction, email writing, study help, length control, and tone changing — in one place, so you don't need to juggle separate apps or subscriptions for each task. Paste in your text, pick a tool from the sidebar, and get a usable result in seconds. It's built for students working through assignments and revision, professionals drafting emails and reports, and anyone who writes regularly and wants a faster way to polish their work. Every tool runs on Groq's fast inference infrastructure, so results come back quickly even for longer pieces of text.</p>
+
+        <div class="feature-grid">
+          <div class="feature-item">
+            <h3>Summarizer</h3>
+            <p>Condense long articles, reports, or notes into a short, accurate summary at the length you choose.</p>
+          </div>
+          <div class="feature-item">
+            <h3>Paraphraser</h3>
+            <p>Reword sentences and paragraphs while preserving the original meaning, in a neutral, formal, or simple tone.</p>
+          </div>
+          <div class="feature-item">
+            <h3>Grammar Fixer</h3>
+            <p>Catch spelling, grammar, and punctuation errors and see exactly what was changed with a built-in diff view.</p>
+          </div>
+          <div class="feature-item">
+            <h3>Email Writer</h3>
+            <p>Turn a short description into a complete, ready-to-send email in a professional or casual tone.</p>
+          </div>
+          <div class="feature-item">
+            <h3>Study Helper</h3>
+            <p>Get any topic explained at beginner, intermediate, or advanced level, formatted as paragraphs, bullets, or Q&A.</p>
+          </div>
+          <div class="feature-item">
+            <h3>Length Control</h3>
+            <p>Shorten text to fit a word limit or expand it with more detail, without losing the original meaning.</p>
+          </div>
+          <div class="feature-item">
+            <h3>Tone Changer</h3>
+            <p>Rewrite the same message in a formal, casual, friendly, professional, or academic voice for a different audience.</p>
+          </div>
+        </div>
+
+        <div class="why-block">
+          <h2 class="intro-heading">Why people use ToolStrike AI</h2>
+          <ul class="why-list">
+            <li><strong>Everything in one place.</strong> Seven writing tools behind a single sidebar instead of seven separate bookmarks.</li>
+            <li><strong>No sign-up required.</strong> Open a tool, paste your text, and get a result — no account needed to try it.</li>
+            <li><strong>Built for everyday writing.</strong> Aimed at real tasks like emails, assignments, and revision, not just novelty demos.</li>
+            <li><strong>Fast responses.</strong> Powered by Groq's inference infrastructure, so even longer text comes back quickly.</li>
+          </ul>
+        </div>
+
+        <div class="faq-block">
+          <h2 class="intro-heading">Frequently asked questions</h2>
+
+          <details class="faq-item">
+            <summary>Is ToolStrike AI free to use?</summary>
+            <p>Yes. All seven tools — summarizer, paraphraser, grammar fixer, email writer, study helper, length control, and tone changer — are free to use directly in your browser.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>Do I need to create an account?</summary>
+            <p>No. You can open any tool from the sidebar and start using it right away. There's no sign-up or login required to generate a result.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>What happens to the text I paste in?</summary>
+            <p>Your text is sent to the AI model solely to generate the requested output (a summary, a rewrite, a correction, and so on) and is not stored permanently. See our <a href="/frontend/privacy.html">Privacy Policy</a> for full details.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>How accurate are the results?</summary>
+            <p>ToolStrike AI uses large language models to generate its output, which is generally accurate but can occasionally make mistakes, especially with technical, legal, or highly specialized text. Always review important content — like emails you're about to send or facts you're about to cite — before relying on it.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>Which tool should I use to shorten a long document?</summary>
+            <p>Use the Summarizer if you want the key points pulled out into a new, shorter piece of writing. Use Length Control's "Shorten" mode if you want to keep your own wording and structure but reduce the word count.</p>
+          </details>
+
+          <details class="faq-item">
+            <summary>Can I use ToolStrike AI on my phone?</summary>
+            <p>Yes. The workspace is responsive and includes a mobile tool picker, so you can switch between tools and use them on a phone or tablet just as you would on desktop.</p>
+          </details>
+        </div>
+      </section>
+
       <div class="mobile-tool-picker">
         <label for="mobile-tool-select">Tool</label>
         <select id="mobile-tool-select">
@@ -173,7 +254,8 @@
       <section class="tool-panel">
 
         <!-- SUMMARIZER -->
-        <div class="tool-card" id="summarizer">
+        <div class="tool-card active" id="summarizer">
+          <p class="tool-about">The Summarizer condenses long articles, reports, research papers, or meeting notes into a short, accurate summary in seconds. Instead of skimming through pages of text, paste it in below and choose how short or detailed you want the result to be. It's useful for students reviewing course material, professionals digesting long emails or documents, and anyone who wants the key points without reading the whole thing.</p>
           <div class="panel-grid">
             <div class="panel-section">
               <label>Paste your text</label>
@@ -205,6 +287,7 @@
 
         <!-- PARAPHRASER -->
         <div class="tool-card" id="paraphraser">
+          <p class="tool-about">The Paraphraser rewrites your text in fresh wording while keeping the original meaning intact. Choose a Neutral, Formal, or Simple tone depending on where the text is going — an essay, a report, or a message to a friend. It's commonly used to avoid repetitive phrasing, adapt writing for a different audience, or rework a sentence that just isn't landing right, without having to start from a blank page.</p>
           <div class="panel-grid">
             <div class="panel-section">
               <label>Paste your text</label>
@@ -236,6 +319,7 @@
 
         <!-- GRAMMAR FIXER -->
         <div class="tool-card" id="grammar">
+          <p class="tool-about">The Grammar Fixer scans your text for spelling mistakes, grammar errors, punctuation slips, and awkward phrasing, then returns a cleaned-up version alongside a diff view so you can see exactly what changed. It's built for anyone who wants a quick proofreading pass before sending an email, submitting an assignment, or publishing a post, without needing a separate grammar-checking subscription.</p>
           <div class="panel-grid">
             <div class="panel-section">
               <label>Paste your text</label>
@@ -263,6 +347,7 @@
 
         <!-- EMAIL WRITER -->
         <div class="tool-card" id="email">
+          <p class="tool-about">The Email Writer turns a short description into a complete, ready-to-send email. Describe who the email is for and what you need to say, pick a type (professional or casual) and a tone (polite, friendly, or serious), and get a draft you can copy, tweak, and send. It saves the time spent staring at a blank compose window for routine messages like follow-ups, requests, applications, and replies.</p>
           <div class="panel-grid">
             <div class="panel-section">
               <label>Email description</label>
@@ -300,6 +385,7 @@
 
         <!-- STUDY HELPER -->
         <div class="tool-card" id="study">
+          <p class="tool-about">The Study Helper explains any topic at the level of detail you need, from a quick beginner overview to an in-depth, advanced breakdown. Pick a difficulty level and a format — paragraph, bullet points, or Q&A — and get an explanation you can actually learn from, not just a wall of text. It's useful for exam revision, understanding a new subject before a lecture, or getting a second explanation when a textbook definition doesn't click.</p>
           <div class="panel-grid">
             <div class="panel-section">
               <label>Topic</label>
@@ -338,6 +424,7 @@
 
         <!-- LENGTH CONTROL -->
         <div class="tool-card" id="length">
+          <p class="tool-about">Length Control shortens or expands your text while keeping the original meaning and tone. Use Shorten when you're over a word limit or need a tighter version for a caption or summary line, and Expand when a paragraph needs more detail, context, or supporting explanation to meet a word count or read less bare. It's a fast way to hit a target length without manually rewriting from scratch.</p>
           <div class="panel-grid">
             <div class="panel-section">
               <label>Paste your text</label>
@@ -369,6 +456,7 @@
 
         <!-- TONE CHANGER -->
         <div class="tool-card" id="tone">
+          <p class="tool-about">The Tone Changer rewrites your text in a different voice while keeping the message the same. Choose from Formal, Casual, Friendly, Aggressive, Professional, or Academic, and get a version suited to the audience you're actually writing for — a stern email in Professional, a relaxed message in Casual, or an essay passage in Academic. It's helpful when the same piece of writing needs to work for more than one audience.</p>
           <div class="panel-grid">
             <div class="panel-section">
               <label>Paste your text</label>
