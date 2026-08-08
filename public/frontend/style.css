@@ -380,7 +380,7 @@ body[data-theme="dark"] .theme-thumb {
 .ambient-stage {
   position: relative;
   height: 150px;
-  margin-top: 18px;
+  margin: 26px 0;
   overflow: hidden;
   border: 1px solid var(--border-soft);
   border-radius: var(--radius-lg);
