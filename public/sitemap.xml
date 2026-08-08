@@ -36,4 +36,8 @@
     <loc>https://tool-strike-ai.vercel.app/frontend/blog/study-smarter-with-ai.html</loc>
     <priority>0.6</priority>
   </url>
+  <url>
+    <loc>https://tool-strike-ai.vercel.app/frontend/blog/how-to-paraphrase-properly.html</loc>
+    <priority>0.6</priority>
+  </url>
 </urlset>
